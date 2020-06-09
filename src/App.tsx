@@ -15,9 +15,9 @@ function App() {
   return (
     <Router history={ history }>
       <Switch>
-        <Route exact path={ ROUTES.LANDING } component={ LandingPage }/>
         <Route exact path={ ROUTES.MY_STORIES } component={ MyStoriesPage }/>
         <Route exact path={ ROUTES.DM_CREATOR } component={ DMCreatorPage }/>
+        <Route path={ ROUTES.LANDING } component={ LandingPage }/>
       </Switch>
     </Router>
   );

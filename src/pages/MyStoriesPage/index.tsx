@@ -27,11 +27,11 @@ const MyStoriesPage: React.FC<RouteComponentProps> = ({ history }) => {
           const myStories = await getMyStories(authorID);
           setStories(myStories);
         },
-        () => { history.push(ROUTES.LANDING); console.log("getUserID failure"); }
+        () => { history.replace(ROUTES.LANDING); console.log("getUserID failure"); }
       )
     } catch (e) {
       console.log("getMessengerSDK ERROR");
-      history.push(ROUTES.LANDING);
+      history.replace(ROUTES.LANDING);
     }
   }, [])
 
