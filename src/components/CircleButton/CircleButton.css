@@ -1,0 +1,14 @@
+.CircleButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 70px;
+  background-color: #f1f0f0;
+  height: 70px;
+  width: 70px;
+  box-shadow: 5px 10px 18px rgba(0, 0, 0, 0.3);
+  font-size: 2rem;
+  color: #0099FF;
+  cursor: pointer;
+  user-select: none;
+}

@@ -1,0 +1,38 @@
+.Message {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  margin-top: 10px;
+}
+
+.Message.author {
+  justify-content: flex-end;
+}
+
+.Message .authorPic {
+  border-radius: 30px;
+  margin-right: 10px;
+  height: 30px;
+  width: 30px;
+}
+
+.Message .messageBody {
+  max-width: 70%;
+}
+
+.Message .authorName {
+  margin: 0px 0px 2px 12px;
+  font-size: 0.8rem;
+  color: rgba(0, 0, 0, .40);
+}
+
+.Message .messageText {
+  border-radius: 1.3em;
+  background-color: #f1f0f0;
+  padding: 6px 12px 7px;
+}
+
+.Message.author .messageText {
+  background-color: #0099FF;
+  color: white;
+}

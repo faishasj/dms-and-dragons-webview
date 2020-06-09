@@ -1,0 +1,23 @@
+.DMCreatorPage {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.DMCreatorPage .container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.DMCreatorPage .messengerView {
+  overflow-y: scroll;
+  padding: 10px 10px 20px 10px;
+  flex: 5;
+}
+
+.DMCreatorPage .toolbar {
+  z-index: 1;
+  box-shadow: -5px -1px 18px rgba(0, 0, 0, 0.2);
+  flex: 1;
+}

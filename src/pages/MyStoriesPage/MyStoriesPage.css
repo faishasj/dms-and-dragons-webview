@@ -1,0 +1,30 @@
+.MyStoriesPage .background {
+  position: fixed;
+  background-image: linear-gradient(#0099FF, #57FFD7);
+  z-index: -1;
+  width: 100vw;
+  height: 100vh;
+}
+
+.MyStoriesPage .container {
+  height: 100%;
+  padding-bottom: 3.5rem;
+  overflow: scroll;
+}
+
+.MyStoriesPage .storyList {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.MyStoriesPage .MyStoryCard {
+  margin-top: 2rem;
+}
+
+.MyStoriesPage .newStoryButton {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  margin: 0px 20px 20px 0px;
+}

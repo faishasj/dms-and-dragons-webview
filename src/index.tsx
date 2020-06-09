@@ -3,6 +3,9 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import { initMessenger } from './api/Messenger';
+
+initMessenger();
 
 ReactDOM.render(
   <React.StrictMode>
