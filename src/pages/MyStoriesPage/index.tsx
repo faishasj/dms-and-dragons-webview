@@ -4,7 +4,6 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import * as ROUTES from '../../constants/Routes';
 
 import { getMyStories } from '../../api/Database';
-import { getMessengerSDK } from '../../api/Messenger';
 
 import { Story } from '../../constants/Types';
 import Header from '../../components/Header';
@@ -13,31 +12,17 @@ import CircleButton from '../../components/CircleButton';
 import './MyStoriesPage.css';
 
 
-const MyStoriesPage: React.FC<RouteComponentProps> = ({ history }) => {
-  const [authorID, setAuthorID] = useState<string>("");
+const MyStoriesPage: React.FC<MyStoriesPageProps> = ({ history, authorID }) => {
   const [stories, setStories] = useState<Story[]>([]);
 
   const setMyStories = useCallback(async () => {
-    try {
-      const messengerSDK = await getMessengerSDK();
-      messengerSDK.getUserID(
-        async (userID: string) => {
-          setAuthorID(userID);
-          console.log(authorID);
-          const myStories = await getMyStories(authorID);
-          setStories(myStories);
-        },
-        () => { history.replace(ROUTES.LANDING); console.log("getUserID failure"); }
-      )
-    } catch (e) {
-      console.log("getMessengerSDK ERROR");
-      history.replace(ROUTES.LANDING);
-    }
-  }, [])
+    const myStories = await getMyStories(authorID);
+    setStories(myStories);
+  }, [authorID])
 
   useEffect(() => {
     setMyStories();
-  }, [])
+  }, [authorID])
 
   return (
       <div className="MyStoriesPage">
@@ -62,6 +47,10 @@ const MyStoriesPage: React.FC<RouteComponentProps> = ({ history }) => {
         </div>
     </div>
   );
+}
+
+export interface MyStoriesPageProps extends RouteComponentProps {
+  authorID: string
 }
 
 export default withRouter(MyStoriesPage);
