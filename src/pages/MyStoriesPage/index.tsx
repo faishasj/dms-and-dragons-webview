@@ -22,7 +22,7 @@ const MyStoriesPage: React.FC<RouteComponentProps> = ({ history }) => {
   const [stories, setStories] = useState<Story[]>([]);
 
   const setMyStories = useCallback(async () => {
-    const myStories = await getMyStories('3933693980036784');
+    const myStories = await getMyStories(authorID);
     setStories(myStories);
   }, [authorID])
 
@@ -34,10 +34,8 @@ const MyStoriesPage: React.FC<RouteComponentProps> = ({ history }) => {
         },
         (error: any) => {}
       )
-    } else {
-      history.replace(ROUTES.LANDING);
     }
-  }, [])
+  }, [messengerSDK])
 
   useEffect(() => {
     setMyStories();

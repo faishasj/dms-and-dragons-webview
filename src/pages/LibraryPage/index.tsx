@@ -27,7 +27,6 @@ const LibraryPage: React.FC<RouteComponentProps> = ({ history }) => {
   }, [])
 
   const readStory = useCallback(storyId => {
-
     if (messengerSDK) {
       messengerSDK.requestCloseBrowser(
         () => {
@@ -37,7 +36,7 @@ const LibraryPage: React.FC<RouteComponentProps> = ({ history }) => {
         () => console.log("ERROR")
       );
     }
-  }, [])
+  }, [messengerSDK, readerID])
 
   useEffect(() => {
     if (messengerSDK) {
@@ -47,11 +46,9 @@ const LibraryPage: React.FC<RouteComponentProps> = ({ history }) => {
         },
         (error: any) => {}
       )
-    } else {
-      history.replace(ROUTES.LANDING);
     }
     setLibrary();
-  }, [])
+  }, [messengerSDK])
 
   return (
     <div className="LibraryPage">
@@ -59,7 +56,7 @@ const LibraryPage: React.FC<RouteComponentProps> = ({ history }) => {
       <Header pageTitle="Library"/>
       <div className="container">
         <div className="storyList">
-        {stories.map(({id, authorName, metadata: { title, description, genre, coverPhoto }}, key) => (
+        {readerID && stories.map(({id, authorName, metadata: { title, description, genre, coverPhoto }}, key) => (
             <StoryCard 
               key={ key }
               isLibrary={ true }
