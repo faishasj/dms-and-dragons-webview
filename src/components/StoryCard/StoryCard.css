@@ -1,34 +1,36 @@
-.MyStoryCard {
+.StoryCard {
   position: relative;
   align-items: center;
+  margin-top: 2rem;
   width: 90%;
   flex: 1;
 }
 
-.MyStoryCard .card {
+.StoryCard .card {
   position: absolute;
   border-radius: 0.5rem;
   margin-top: 5px;
   background-color: #ffffff;
   height: 160px;
   width: 100%;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
 }
 
-.MyStoryCard .data {
+.StoryCard .data {
   position: relative;
   display: flex;
   flex-direction: row;
   margin: 0px 20px 0px 20px;
 }
 
-.MyStoryCard .coverPhoto {
+.StoryCard .coverPhoto {
   height: 150px;
   width: 100px;
   box-shadow: 5px 10px 18px rgba(0, 0, 0, 0.3);
   object-fit: cover;
 }
 
-.MyStoryCard .textData {
+.StoryCard .textData {
   display: flex;
   flex-direction: column;
   margin-top: 15px;
@@ -36,21 +38,28 @@
   width: 100%;
 }
 
-.MyStoryCard .title {
+.StoryCard .title {
   display: flex;
   align-items: center;
   font-size: 1rem;
   font-weight: bold;
 }
 
-.MyStoryCard .textTitle {
+.StoryCard .textTitle {
   max-width: 130px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.MyStoryCard .published {
+.StoryCard .author {
+  margin-left: 5px;
+  font-size: 0.75rem;
+  font-weight: normal;
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.StoryCard .published {
   border-radius: 4px;
   margin: 3px 0px 0px 5px;
   background-color: #ccc;
@@ -58,12 +67,12 @@
   font-size: 0.5rem;
 }
 
-.MyStoryCard .genre {
+.StoryCard .genre {
   margin-top: 3px;
   font-size: 0.8rem;
 }
 
-.MyStoryCard .description {
+.StoryCard .description {
   position: relative;
   margin: 5px 0px 5px 0px;
   height: 70px;
@@ -72,14 +81,14 @@
   font-size: 0.7rem;
 }
 
-.MyStoryCard .actions {
+.StoryCard .actions {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
 }
 
-.MyStoryCard .delete {
+.StoryCard .delete {
   margin-left: 15px;
   color: #e24c4c;
 }

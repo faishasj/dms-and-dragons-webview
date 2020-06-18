@@ -1,24 +1,43 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useContext } from 'react';
 
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import * as ROUTES from '../../constants/Routes';
 
 import { getMyStories } from '../../api/Database';
 
+import { MessengerContext } from '../../App';
+import { ThreadContext } from '../../api/Messenger';
+
 import { Story } from '../../constants/Types';
 import Header from '../../components/Header';
-import MyStoryCard from './MyStoryCard';
+import StoryCard from '../../components/StoryCard';
 import CircleButton from '../../components/CircleButton';
 import './MyStoriesPage.css';
 
 
-const MyStoriesPage: React.FC<MyStoriesPageProps> = ({ history, authorID }) => {
+const MyStoriesPage: React.FC<RouteComponentProps> = ({ history }) => {
+  const messengerSDK: any = useContext(MessengerContext);
+
+  const [authorID, setAuthorID] = useState<string>('');
   const [stories, setStories] = useState<Story[]>([]);
 
   const setMyStories = useCallback(async () => {
-    const myStories = await getMyStories(authorID);
+    const myStories = await getMyStories('3933693980036784');
     setStories(myStories);
   }, [authorID])
+
+  useEffect(() => {
+    if (messengerSDK) {
+      messengerSDK?.getContext('256197072270291',
+        async ({ psid }: ThreadContext) => {
+          setAuthorID(psid);
+        },
+        (error: any) => {}
+      )
+    } else {
+      history.replace(ROUTES.LANDING);
+    }
+  }, [])
 
   useEffect(() => {
     setMyStories();
@@ -31,13 +50,16 @@ const MyStoriesPage: React.FC<MyStoriesPageProps> = ({ history, authorID }) => {
         <div className="container">
           <div className="storyList">
             {stories.map(({published, metadata: { title, description, genre, coverPhoto }}, key) => (
-              <MyStoryCard 
+              <StoryCard 
                 key={ key }
+                isLibrary={ false }
                 title={ title } 
                 description={ description } 
                 genre={ genre } 
                 coverPhoto={ coverPhoto }
                 published={ published }
+                editCallback={ () => alert("HI") }
+                deleteCallback={ () => alert("TEST") }
               />
             ))}
           </div>
@@ -47,10 +69,6 @@ const MyStoriesPage: React.FC<MyStoriesPageProps> = ({ history, authorID }) => {
         </div>
     </div>
   );
-}
-
-export interface MyStoriesPageProps extends RouteComponentProps {
-  authorID: string
 }
 
 export default withRouter(MyStoriesPage);

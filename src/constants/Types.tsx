@@ -18,6 +18,7 @@ export interface User {
 export interface Story {
   id: string;
   authorId: User['id'];
+  authorName? :User['name'];
   published: boolean;
   metadata: {
     coverPhoto: Uri;

@@ -9,7 +9,7 @@ export const initMessenger = async () => {
   }
 };
 
-export const getMessengerSDK = (): Promise<any> =>
+export const loadMessengerSDK = (): Promise<any> =>
   new Promise((resolve, reject) => {
     (window as any).extAsyncInit = function() {
       // @ts-ignore
