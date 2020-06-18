@@ -26,5 +26,6 @@
 
     ```zsh
     $ yarn start
+    ```
 
 If you would like to tunnel the webview, follow the instructions for developing with ngrok in the [webhook repository](https://github.com/faishasj/dms-and-dragons-webhook) for DMs and Dragons.
