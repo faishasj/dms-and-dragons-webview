@@ -5,7 +5,7 @@ import Message from './Message';
 import './DMCreatorPage.css';
 
 
-const DMCreatorPage: React.FC = () => {
+const DMCreatorPage: React.FC<DMCreatorPageProps> = ({ storyID }) => {
   return (
     <div className="DMCreatorPage">
       <Header pageTitle="DM Creator"/>
@@ -21,6 +21,10 @@ const DMCreatorPage: React.FC = () => {
       </div>
     </div>
   )
+}
+
+export interface DMCreatorPageProps {
+  storyID?: string
 }
 
 export default DMCreatorPage;
