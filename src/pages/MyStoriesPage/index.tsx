@@ -8,6 +8,9 @@ import { getMyStories, deleteStory } from '../../api/Database';
 import { MessengerContext } from '../../App';
 import { ThreadContext } from '../../api/Messenger';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCamera } from '@fortawesome/free-solid-svg-icons';
+
 import { Story } from '../../constants/Types';
 import Header from '../../components/Header';
 import StoryCard from '../../components/StoryCard';
@@ -102,6 +105,7 @@ const MyStoriesPage: React.FC<RouteComponentProps> = ({ history }) => {
                 <div className="metadata">
                   <div className="coverPhotoData">
                     <div className="coverPhotoContainer">
+                      <FontAwesomeIcon icon={ faCamera }/>
                     </div>
                   </div>
                   <div className="textData">
