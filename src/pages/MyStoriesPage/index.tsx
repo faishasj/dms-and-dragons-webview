@@ -12,8 +12,7 @@ import { Story } from '../../constants/Types';
 import Header from '../../components/Header';
 import StoryCard from '../../components/StoryCard';
 import CircleButton from '../../components/CircleButton';
-import Modal from '../../components/Modal';
-import Link from '../../components/Link';
+import DialogModal from '../../components/DialogModal';
 import './MyStoriesPage.css';
 
 
@@ -78,11 +77,13 @@ const MyStoriesPage: React.FC<RouteComponentProps> = ({ history }) => {
           </div>
           
           {deletingStory && (
-            <Modal prompt={`Are you sure you want to delete ${deletingStory?.metadata.title}?`} 
-            buttons={<>
-              <Link label="CANCEL" onClick={() => setDeletingStory(null)}/>
-              <Link label="DELETE" onClick={() => deleteStory(deletingStory.id)}/>
-            </>}/>
+            <DialogModal 
+              prompt={`Are you sure you want to delete ${deletingStory?.metadata.title}?`} 
+              actionName="DELETE"
+              actionCallback={() => deleteStory(deletingStory.id)}
+              cancelName="CANCEL"
+              cancelCallback={() => setDeletingStory(null)}
+            />
           )}
         </div>
     </div>
