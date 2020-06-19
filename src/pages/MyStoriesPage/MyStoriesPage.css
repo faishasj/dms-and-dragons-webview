@@ -1,15 +1,15 @@
 .MyStoriesPage .background {
+  z-index: -1;
   position: fixed;
   background-image: linear-gradient(#0099FF, #57FFD7);
-  z-index: -1;
-  width: 100vw;
   height: 100vh;
+  width: 100vw;
 }
 
 .MyStoriesPage .container {
   height: 100%;
-  padding-bottom: 3.5rem;
   overflow: scroll;
+  padding-bottom: 3.5rem;
 }
 
 .MyStoriesPage .storyList {
@@ -23,4 +23,101 @@
   bottom: 0;
   right: 0;
   margin: 0px 20px 20px 0px;
+}
+
+/* FORM INPUTS */
+
+.newStoryForm label {
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: #0099FF;
+}
+
+.newStoryForm input {
+  border: none;
+  border-bottom: 1px solid #0099FF;
+  border-radius: 0px;
+  margin-bottom: 25px;
+  height: 1.5rem;
+  width: 160px;
+  font-size: 0.9rem;
+  color: #333333;
+}
+
+.newStoryForm input:focus {
+  outline: none;
+}
+
+.newStoryForm select {
+  border: none;
+  border-bottom: 1px solid #0099FF;
+  border-radius: 0px;
+  background: none;
+  height: 2rem;
+  width: 100%;
+  font-size: 0.9rem;
+  color: #333333;
+}
+
+.newStoryForm select:focus {
+  outline: none;
+}
+
+.newStoryForm textarea {
+  border: 1px solid #0099FF;
+  border-radius: 0px;
+  margin: none;
+  width: 95%;
+  font-family: Helvetica Neue, Segoe UI, Helvetica, Arial, sans-serif;
+  font-size: 0.9rem;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.newStoryForm textarea:focus {
+  outline: none;
+}
+
+/* FORM */
+
+.newStoryForm .title {
+  color: #0099FF;
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.newStoryForm .metadata {
+  display: flex;
+  flex-direction: row;
+}
+
+.newStoryForm .coverPhotoData {
+  margin-right: 20px;
+}
+
+.newStoryForm .coverPhotoContainer {
+  background-color: #dddddd;
+  height: 150px;
+  width: 100px;
+}
+
+.newStoryForm .descriptionContainer {
+  margin-top: 12px;
+}
+
+.newStoryForm .buttons {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.newStoryForm .buttons .Link {
+  margin-left: 15px;
+}
+
+.newStoryForm .buttons .cancel {
+  color: #e24c4c;
 }

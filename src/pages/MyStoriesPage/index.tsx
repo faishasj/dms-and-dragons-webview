@@ -12,7 +12,9 @@ import { Story } from '../../constants/Types';
 import Header from '../../components/Header';
 import StoryCard from '../../components/StoryCard';
 import CircleButton from '../../components/CircleButton';
+import Modal from '../../components/Modal';
 import DialogModal from '../../components/DialogModal';
+import Link from '../../components/Link';
 import './MyStoriesPage.css';
 
 
@@ -22,6 +24,7 @@ const MyStoriesPage: React.FC<RouteComponentProps> = ({ history }) => {
   const [authorID, setAuthorID] = useState<string>('3933693980036784');
   const [stories, setStories] = useState<Story[]>([]);
   const [deletingStory, setDeletingStory] = useState<Story | null>(null);
+  const [creatingStory, setCreatingStory] = useState<boolean>(false);
 
   const setMyStories = useCallback(async () => {
     const myStories = await getMyStories(authorID);
@@ -36,6 +39,10 @@ const MyStoriesPage: React.FC<RouteComponentProps> = ({ history }) => {
     await deleteStory(storyID);
     setDeletingStory(null);
     setMyStories();
+  }, [])
+
+  const createStory = useCallback(() => {
+
   }, [])
 
   useEffect(() => {
@@ -64,7 +71,7 @@ const MyStoriesPage: React.FC<RouteComponentProps> = ({ history }) => {
                 key={ key }
                 isLibrary={ false }
                 title={ story.metadata.title } 
-                description={ story.metadata.description } 
+                description={ story.metadata.description }
                 genre={ story.metadata.genre } 
                 coverPhoto={ story.metadata.coverPhoto }
                 published={ story.published }
@@ -75,7 +82,7 @@ const MyStoriesPage: React.FC<RouteComponentProps> = ({ history }) => {
           </div>
 
           <div className="newStoryButton">
-            <CircleButton icon="✍️" onClick={() => history.push(ROUTES.DM_CREATOR)}/>
+            <CircleButton icon="✍️" onClick={() => setCreatingStory(true)}/>
           </div>
           
           {deletingStory && (
@@ -86,6 +93,47 @@ const MyStoriesPage: React.FC<RouteComponentProps> = ({ history }) => {
               cancelName="CANCEL"
               cancelCallback={() => setDeletingStory(null)}
             />
+          )}
+
+          {creatingStory && (
+            <Modal>
+              <div className="newStoryForm">
+                <div className="title">Create a new story!</div>
+                <div className="metadata">
+                  <div className="coverPhotoData">
+                    <div className="coverPhotoContainer">
+                    </div>
+                  </div>
+                  <div className="textData">
+                    <div><label htmlFor="title">TITLE</label></div>
+                    <input id="title" name="title" type="text" placeholder="Enter title..."></input>
+
+                    <div><label htmlFor="genre">GENRE</label></div>
+                    <select id="genre" name="genre">
+                      <option value="Comedy">🤣 Comedy</option>
+                      <option value="Drama">🎭 Drama</option>
+                      <option value="Educational">🤔 Educational</option>
+                      <option value="Fantasy">🏰 Fantasy</option>
+                      <option value="Horror">😱 Horror</option>
+                      <option value="Non-fiction">🧐 Non-fiction</option>
+                      <option value="Romance">💕 Romance</option>
+                      <option value="Sci-fi">🧪 Sci-fi</option>
+                      <option value="Western">🤠 Western</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="descriptionContainer">
+                  <div><label htmlFor="description">DESCRIPTION</label></div>
+                  <textarea rows={4} name="description" placeholder="Enter description..."/>
+                </div>
+
+                <div className="buttons">
+                  <Link label="CANCEL" className="cancel" onClick={() => setCreatingStory(false)}/>
+                  <Link label="NEXT" onClick={() => createStory()}/>
+                </div>
+              </div>
+            </Modal>
           )}
         </div>
     </div>
