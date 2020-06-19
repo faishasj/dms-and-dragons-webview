@@ -1,0 +1,32 @@
+.Modal .modalBackground {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Modal .modalCard {
+  background-color: #ffffff;
+  padding: 1rem;
+  border-radius: 0.8rem;
+  max-width: 70vw;
+}
+
+
+.Modal .buttons {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.Modal .buttons .Link {
+  margin-left: 15px;
+}
