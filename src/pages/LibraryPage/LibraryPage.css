@@ -1,15 +1,48 @@
 .LibraryPage .background {
+  z-index: -1;
   position: fixed;
   background-image: linear-gradient(#0099FF, #57FFD7);
-  z-index: -1;
-  width: 100vw;
   height: 100vh;
+  width: 100vw;
 }
 
 .LibraryPage .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   height: 100%;
-  padding-bottom: 3.5rem;
   overflow: scroll;
+  padding-bottom: 3.5rem;
+}
+
+.LibraryPage .searchbar {
+  position: relative;
+  margin-top: 20px;
+  width: 90%;
+}
+
+.LibraryPage .search {
+  border: none;
+  border-radius: 0.3rem;
+  height: 1.6rem;
+  width: 100%;
+  box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.2);
+  padding: 2px !important;
+  font-size: 0.9rem;
+  color: #333333;
+}
+
+.LibraryPage .search:focus {
+  outline: none;
+}
+
+.LibraryPage .searchIcon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-top: 0.4rem;
+  margin-right: 0.2rem;
+  color: #666666;
 }
 
 .LibraryPage .storyList {
