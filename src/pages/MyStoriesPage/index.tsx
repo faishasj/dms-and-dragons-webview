@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback, useContext } from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import * as ROUTES from '../../constants/Routes';
 
-import { getMyStories } from '../../api/Database';
+import { getMyStories, deleteStory } from '../../api/Database';
 
 import { MessengerContext } from '../../App';
 import { ThreadContext } from '../../api/Messenger';
@@ -32,8 +32,10 @@ const MyStoriesPage: React.FC<RouteComponentProps> = ({ history }) => {
     history.push(ROUTES.DM_CREATOR, { storyID });
   }, [])
 
-  const deleteStory = useCallback(storyID => {
-    
+  const deleteMyStory = useCallback(async storyID => {
+    await deleteStory(storyID);
+    setDeletingStory(null);
+    setMyStories();
   }, [])
 
   useEffect(() => {
@@ -80,7 +82,7 @@ const MyStoriesPage: React.FC<RouteComponentProps> = ({ history }) => {
             <DialogModal 
               prompt={`Are you sure you want to delete ${deletingStory?.metadata.title}?`} 
               actionName="DELETE"
-              actionCallback={() => deleteStory(deletingStory.id)}
+              actionCallback={() => deleteMyStory(deletingStory.id)}
               cancelName="CANCEL"
               cancelCallback={() => setDeletingStory(null)}
             />
