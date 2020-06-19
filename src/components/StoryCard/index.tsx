@@ -12,7 +12,9 @@ const StoryCard: React.FC<StoryCardProps>
     <div className="StoryCard">
       <div className="card"/>
       <div className="data">
-        <img className="coverPhoto" src={ coverPhoto }/>
+        <div className="coverPhotoContainer">
+          <img className="coverPhoto" src={ coverPhoto }/>
+        </div>
         <div className="textData"> 
           <div className="title">
             <div className="textTitle">{ title }</div>
