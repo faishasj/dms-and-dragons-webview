@@ -10,7 +10,7 @@ function serialize(doc: firestore.DocumentSnapshot): any {
   };
 }
 
-export async function getMyStories(authorId: Story['id']): Promise<Story[]> {
+export async function getMyStories(authorId: Story['authorId']): Promise<Story[]> {
   const storiesQuery = await db.collection('stories')
                                .where('authorId', '==', authorId)
                                .orderBy('dateUpdated', 'desc').get();
@@ -26,4 +26,8 @@ export async function getLibrary(): Promise<Story[]> {
           const author = await db.collection('users').doc(story.authorId).get();
           return { ...story, authorName: author.data()?.name || ''};
         }));
+}
+
+export async function deleteStory(storyId: Story['id']): Promise<void> {
+  return db.collection('stories').doc(storyId).delete();
 }
