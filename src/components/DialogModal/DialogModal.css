@@ -1,0 +1,15 @@
+.DialogModal .buttons {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.DialogModal .buttons .Link {
+  margin-left: 15px;
+}
+
+.DialogModal .buttons .action {
+  color: #e24c4c;
+}

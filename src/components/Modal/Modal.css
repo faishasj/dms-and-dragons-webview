@@ -17,16 +17,3 @@
   border-radius: 0.8rem;
   max-width: 70vw;
 }
-
-
-.Modal .buttons {
-  margin-top: 10px;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  align-items: center;
-}
-
-.Modal .buttons .Link {
-  margin-left: 15px;
-}

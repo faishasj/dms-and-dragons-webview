@@ -2,15 +2,12 @@ import React, {FC, ReactNode} from 'react';
 import './Modal.css';
 
 
-const Modal: FC<ModalProps> = ({ prompt, buttons }) => {
+const Modal: FC<ModalProps> = ({ children }) => {
   return (
     <div className="Modal">
       <div className="modalBackground">
         <div className="modalCard">
-          <div className="prompt">{ prompt }</div>
-          <div className="buttons">
-            { buttons }
-          </div>
+          { children }
         </div>
       </div>
     </div>
@@ -18,8 +15,7 @@ const Modal: FC<ModalProps> = ({ prompt, buttons }) => {
 }
 
 export interface ModalProps {
-  prompt: string,
-  buttons: ReactNode
+  children: ReactNode
 }
 
 export default Modal;
