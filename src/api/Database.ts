@@ -28,6 +28,10 @@ export async function getLibrary(): Promise<Story[]> {
         }));
 }
 
+export async function newStory(story: Story): Promise<void> {
+  return db.collection('stories').doc(story.id).set({})
+}
+
 export async function deleteStory(storyId: Story['id']): Promise<void> {
   return db.collection('stories').doc(storyId).delete();
 }
