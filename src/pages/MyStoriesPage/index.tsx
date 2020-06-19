@@ -106,7 +106,8 @@ const MyStoriesPage: React.FC<RouteComponentProps> = ({ history }) => {
                   </div>
                   <div className="textData">
                     <div><label htmlFor="title">TITLE</label></div>
-                    <input id="title" name="title" type="text" placeholder="Enter title..."></input>
+                    <input id="title" name="title" type="text" maxLength={20} 
+                      placeholder="Enter title..."></input>
 
                     <div><label htmlFor="genre">GENRE</label></div>
                     <select id="genre" name="genre">
@@ -125,7 +126,7 @@ const MyStoriesPage: React.FC<RouteComponentProps> = ({ history }) => {
 
                 <div className="descriptionContainer">
                   <div><label htmlFor="description">DESCRIPTION</label></div>
-                  <textarea rows={4} name="description" placeholder="Enter description..."/>
+                  <textarea rows={4} maxLength={120} name="description" placeholder="Enter description..."/>
                 </div>
 
                 <div className="buttons">
