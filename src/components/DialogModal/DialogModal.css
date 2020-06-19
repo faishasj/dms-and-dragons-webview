@@ -1,3 +1,7 @@
+.DialogModal .modalCard {
+  max-width: 70vw;
+}
+
 .DialogModal .buttons {
   margin-top: 10px;
   display: flex;
