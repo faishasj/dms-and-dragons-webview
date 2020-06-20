@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import { initMessenger } from './api/Messenger';
+import { initMessenger } from './lib/Messenger';
 
 initMessenger();
 

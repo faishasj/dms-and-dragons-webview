@@ -4,7 +4,7 @@ import { Router, Route, Switch } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 import * as ROUTES from './constants/Routes';
 
-import { loadMessengerSDK } from './api/Messenger';
+import { loadMessengerSDK } from './lib/Messenger';
 
 import LandingPage from './pages/LandingPage';
 import LibraryPage from './pages/LibraryPage';

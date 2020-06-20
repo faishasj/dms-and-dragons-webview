@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { FC } from 'react';
 import "./Header.css";
 
 
-const Header: React.FC<HeaderProps> = ({ pageTitle }) => {
+const Header: FC<HeaderProps> = ({ pageTitle }) => {
   return (
     <div className="Header">
       <div className="siteName"><span className="siteBubble">DMs</span> and Dragons 🐉</div>

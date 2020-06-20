@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { FC } from 'react';
 import './CircleButton.css';
 
 
-const CircleButton: React.FC<CircleButtonProps> = ({ icon, onClick }) => {
+const CircleButton: FC<CircleButtonProps> = ({ icon, onClick }) => {
   return (
     <div className="CircleButton" onClick={ onClick }>{ icon }</div>
   )

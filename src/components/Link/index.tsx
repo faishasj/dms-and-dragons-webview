@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { FC } from 'react';
 import './Link.css';
 
 
-const Link: React.FC<LinkProps> = ({ className, label, onClick }) => {
+const Link: FC<LinkProps> = ({ className, label, onClick }) => {
   return (
     <div className={"Link " + className}  onClick={ onClick }>{ label }</div>
   )

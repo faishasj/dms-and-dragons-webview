@@ -3,11 +3,11 @@
 }
 
 .DialogModal .buttons {
-  margin-top: 10px;
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
+  margin-top: 10px;
 }
 
 .DialogModal .buttons .Link {

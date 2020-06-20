@@ -4,10 +4,10 @@ import Axios from 'axios';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import * as ROUTES from '../../constants/Routes';
 
-import { getLibrary } from '../../api/Database';
+import { getLibrary } from '../../lib/Database';
 
 import { MessengerContext } from '../../App';
-import { ThreadContext } from '../../api/Messenger';
+import { ThreadContext } from '../../lib/Messenger';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
@@ -21,7 +21,7 @@ import './LibraryPage.css';
 const LibraryPage: React.FC<RouteComponentProps> = ({ history }) => {
   const messengerSDK: any = useContext(MessengerContext);
 
-  const [readerID, setReaderID] = useState<string>('a');
+  const [readerID, setReaderID] = useState<string>('');
   const [stories, setStories] = useState<Story[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
 

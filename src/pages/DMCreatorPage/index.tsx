@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 
 import Header from '../../components/Header';
 import Message from './Message';

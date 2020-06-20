@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { FC } from 'react';
 
 import Link from '../Link';
 import './StoryCard.css';
 
 
-const StoryCard: React.FC<StoryCardProps> 
+const StoryCard: FC<StoryCardProps> 
   = ({ isLibrary, title, description, genre, coverPhoto, authorName, published, 
     readCallback, editCallback, deleteCallback }) => {
 

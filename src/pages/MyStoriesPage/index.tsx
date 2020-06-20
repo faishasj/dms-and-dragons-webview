@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useCallback, useContext } from 'react';
+import React, { FC, useState, useEffect, useCallback, useContext } from 'react';
 
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import * as ROUTES from '../../constants/Routes';
 
-import { getMyStories, deleteStory } from '../../api/Database';
+import { getMyStories, deleteStory } from '../../lib/Database';
 
 import { MessengerContext } from '../../App';
-import { ThreadContext } from '../../api/Messenger';
+import { ThreadContext } from '../../lib/Messenger';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCamera } from '@fortawesome/free-solid-svg-icons';
@@ -21,10 +21,10 @@ import Link from '../../components/Link';
 import './MyStoriesPage.css';
 
 
-const MyStoriesPage: React.FC<RouteComponentProps> = ({ history }) => {
+const MyStoriesPage: FC<RouteComponentProps> = ({ history }) => {
   const messengerSDK: any = useContext(MessengerContext);
 
-  const [authorID, setAuthorID] = useState<string>('3933693980036784');
+  const [authorID, setAuthorID] = useState<string>('');
   const [stories, setStories] = useState<Story[]>([]);
   const [deletingStory, setDeletingStory] = useState<Story | null>(null);
   const [creatingStory, setCreatingStory] = useState<boolean>(false);
@@ -115,15 +115,15 @@ const MyStoriesPage: React.FC<RouteComponentProps> = ({ history }) => {
 
                     <div><label htmlFor="genre">GENRE</label></div>
                     <select id="genre" name="genre">
-                      <option value="Comedy">🤣 Comedy</option>
-                      <option value="Drama">🎭 Drama</option>
-                      <option value="Educational">🤔 Educational</option>
-                      <option value="Fantasy">🏰 Fantasy</option>
-                      <option value="Horror">😱 Horror</option>
-                      <option value="Non-fiction">🧐 Non-fiction</option>
-                      <option value="Romance">💕 Romance</option>
-                      <option value="Sci-fi">🧪 Sci-fi</option>
-                      <option value="Western">🤠 Western</option>
+                      <option value="🤣 Comedy">🤣 Comedy</option>
+                      <option value="🎭 Drama">🎭 Drama</option>
+                      <option value="🤔 Educational">🤔 Educational</option>
+                      <option value="🏰 Fantasy">🏰 Fantasy</option>
+                      <option value="😱 Horror">😱 Horror</option>
+                      <option value="🧐 Non-fiction">🧐 Non-fiction</option>
+                      <option value="💕 Romance">💕 Romance</option>
+                      <option value="🧪 Sci-fi">🧪 Sci-fi</option>
+                      <option value="🤠 Western">🤠 Western</option>
                     </select>
                   </div>
                 </div>
