@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, useContext } from 'react';
 import Axios from 'axios';
 
-import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps } from 'react-router-dom';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
@@ -18,26 +18,20 @@ import Header from '../../components/Header';
 import './LibraryPage.css';
 
 
-const LibraryPage: React.FC<RouteComponentProps> = ({ history }) => {
+const LibraryPage: React.FC<RouteComponentProps> = () => {
   const messengerSDK: any = useContext(MessengerContext);
 
   const [readerID, setReaderID] = useState<string>('');
   const [stories, setStories] = useState<Story[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [library, setLibrary] = useState<Story[]>([]);
 
   useEffect(() => {
-    (async () => {
-      const library = await getLibrary();
-      if (!searchTerm) {
-        setStories(library);
-      } else {
-        setStories(library.filter(({metadata: {title, genre, description}}) => 
-          title.toLowerCase().includes(searchTerm.toLowerCase()) 
-          || genre.toLowerCase().includes(searchTerm.toLowerCase()) 
-          || description.toLowerCase().includes(searchTerm.toLowerCase())));
-      }
-    })();
-  }, [searchTerm])
+    setStories(library.filter(({metadata: {title, genre, description}}) => 
+      title.toLowerCase().includes(searchTerm.toLowerCase()) 
+      || genre.toLowerCase().includes(searchTerm.toLowerCase()) 
+      || description.toLowerCase().includes(searchTerm.toLowerCase())));
+  }, [searchTerm, library])
 
   const readStory = useCallback(storyId => {
     if (messengerSDK) {
@@ -51,8 +45,11 @@ const LibraryPage: React.FC<RouteComponentProps> = ({ history }) => {
     }
   }, [messengerSDK, readerID])
 
-  useFbUser(setReaderID);
+  useEffect(() => {
+    getLibrary().then(lib => setLibrary(lib));
+  }, [setLibrary]);
 
+  useFbUser(setReaderID);
 
   return (
     <div className="LibraryPage">
@@ -60,8 +57,14 @@ const LibraryPage: React.FC<RouteComponentProps> = ({ history }) => {
       <Header pageTitle="Library"/>
       <div className="container">
         <div className="searchbar">
-          <input className="search" id="search" name="search" type="text" 
-            placeholder="Search stories..." onChange={e => setSearchTerm(e.target.value)}/>
+          <input
+            className="search"
+            id="search"
+            name="search"
+            type="text" 
+            placeholder="Search stories..."
+            onChange={e => setSearchTerm(e.target.value)}
+          />
           <FontAwesomeIcon className="searchIcon" icon={ faSearch }/>
         </div>
         <div className="storyList">
@@ -83,4 +86,4 @@ const LibraryPage: React.FC<RouteComponentProps> = ({ history }) => {
   )
 }
 
-export default withRouter(LibraryPage);
+export default LibraryPage;
