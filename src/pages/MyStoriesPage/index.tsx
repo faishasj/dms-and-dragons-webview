@@ -31,8 +31,8 @@ const MyStoriesPage: FC<RouteComponentProps> = ({ history }) => {
     history.push(ROUTES.DM_CREATOR, { storyID });
   }, [history])
 
-  const deleteMyStory = useCallback(async storyID => {
-    await deleteStory(storyID);
+  const deleteMyStory = useCallback(async (story: Story) => {
+    await deleteStory(story);
     setDeletingStory(null);
     setMyStories();
   }, [setMyStories])
@@ -77,7 +77,7 @@ const MyStoriesPage: FC<RouteComponentProps> = ({ history }) => {
             <DialogModal 
               prompt={`Are you sure you want to delete ${deletingStory.metadata.title}?`} 
               actionName="DELETE"
-              actionCallback={() => deleteMyStory(deletingStory.id)}
+              actionCallback={() => deleteMyStory(deletingStory)}
               cancelName="CANCEL"
               cancelCallback={() => setDeletingStory(null)}
             />

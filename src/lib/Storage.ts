@@ -4,7 +4,6 @@ import { storage } from './Firebase';
 import { signInAnon } from './Authentication';
 
 
-
 export const uploadFile = async (
   file: File,
   storagePath = '',
@@ -24,4 +23,6 @@ export const uploadFile = async (
 
   const finalSnapshot = await uploadTask;
   return finalSnapshot.ref.getDownloadURL();
-}
+};
+
+export const deleteFile = async (fileUrl: string) => storage.refFromURL(fileUrl).delete();

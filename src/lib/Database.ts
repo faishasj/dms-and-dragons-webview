@@ -1,7 +1,7 @@
 import { firestore } from 'firebase/app';
 import { db } from './Firebase';
 import { Story, CreateStoryScheme } from '../constants/Types';
-import { uploadFile } from './Storage';
+import { uploadFile, deleteFile } from './Storage';
 
 // Database related Utilities
 
@@ -66,6 +66,7 @@ export async function newStory(authorId: string, { title, image, genre, descript
   return { id, ...storyData } as Story;
 }
 
-export async function deleteStory(storyId: Story['id']): Promise<void> {
-  return collection(Collection.Stories).doc(storyId).delete();
+export async function deleteStory({ id, metadata: { coverPhoto } }: Story): Promise<void> {
+  await deleteFile(coverPhoto);
+  return collection(Collection.Stories).doc(id).delete();
 }
