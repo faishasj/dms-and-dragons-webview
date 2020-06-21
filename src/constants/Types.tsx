@@ -8,6 +8,7 @@ import { PreviewFile } from '../hooks/useFileUpload';
 
 export type Uri = string;
 export type DateTime = firestore.Timestamp;
+export type ProgressCallback = (progress: number, transferred: number, total: number) => void;
 
 // Schemas
 

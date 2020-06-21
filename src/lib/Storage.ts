@@ -2,12 +2,13 @@ import Firebase from 'firebase/app';
 import { v4 as uuid } from 'uuid';
 import { storage } from './Firebase';
 import { signInAnon } from './Authentication';
+import { ProgressCallback } from '../constants/Types';
 
 
 export const uploadFile = async (
   file: File,
   storagePath = '',
-  onProgress?: (progress: number, transferred: number, total: number) => void,
+  onProgress?: ProgressCallback,
 ): Promise<string> => {
 
   await signInAnon();

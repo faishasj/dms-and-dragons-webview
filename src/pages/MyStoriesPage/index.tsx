@@ -13,14 +13,15 @@ import CircleButton from '../../components/CircleButton';
 import DialogModal from '../../components/DialogModal';
 import CreateStoryModal from './CreateStoryModal';
 import './MyStoriesPage.css';
+import LoadingModal from '../../components/LoadingModal';
 
 
 const MyStoriesPage: FC<RouteComponentProps> = ({ history }) => {
-
   const [authorID, setAuthorID] = useState<string>('');
   const [stories, setStories] = useState<Story[]>([]);
   const [deletingStory, setDeletingStory] = useState<Story | null>(null);
   const [creatingStory, setCreatingStory] = useState<boolean>(false);
+  const [loadingProgress, setLoadingProgress] = useState<number | null>(null);
 
   const setMyStories = useCallback(async () => {
     const myStories = await getMyStories(authorID);
@@ -38,9 +39,11 @@ const MyStoriesPage: FC<RouteComponentProps> = ({ history }) => {
   }, [setMyStories])
 
   const createStory = useCallback(async (data: CreateStoryScheme) => {
-    const story = await newStory(authorID, data);
+    setCreatingStory(false);
+    const story = await newStory(authorID, data, (progress) => setLoadingProgress(progress));
+    setLoadingProgress(null);
     console.log(story);
-  }, [authorID])
+  }, [authorID, setLoadingProgress])
 
   useEffect(() => {
     setMyStories();
@@ -72,6 +75,8 @@ const MyStoriesPage: FC<RouteComponentProps> = ({ history }) => {
           <div className="newStoryButton">
             <CircleButton icon="✍️" onClick={() => setCreatingStory(true)}/>
           </div>
+
+          {loadingProgress !== null && <LoadingModal progress={loadingProgress} />}
           
           {deletingStory && (
             <DialogModal 

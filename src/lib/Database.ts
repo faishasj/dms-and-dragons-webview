@@ -1,6 +1,6 @@
 import { firestore } from 'firebase/app';
 import { db } from './Firebase';
-import { Story, CreateStoryScheme } from '../constants/Types';
+import { Story, CreateStoryScheme, ProgressCallback } from '../constants/Types';
 import { uploadFile, deleteFile } from './Storage';
 
 // Database related Utilities
@@ -49,8 +49,12 @@ export async function getLibrary(): Promise<Story[]> {
         }));
 }
 
-export async function newStory(authorId: string, { title, image, genre, description }: CreateStoryScheme): Promise<Story> {
-  const coverPhoto = await uploadFile(image, '/storyCovers');
+export async function newStory(
+  authorId: string,
+  { title, image, genre, description }: CreateStoryScheme,
+  onProgress?: ProgressCallback,
+): Promise<Story> {
+  const coverPhoto = await uploadFile(image, '/storyCovers', onProgress);
 
   const storyData: Partial<Story> = {
     authorId,
