@@ -26,5 +26,5 @@ export interface ThreadContext {
   thread_type: string,
   tid: string,
   psid: string,
-  signed_reques: string
+  signed_request: string
 }

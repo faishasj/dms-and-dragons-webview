@@ -1,15 +1,13 @@
-import React, { FC, useState, useEffect, useCallback, useContext } from 'react';
-
+import React, { FC, useState, useEffect, useCallback } from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
-import * as ROUTES from '../../constants/Routes';
-
-import { getMyStories, deleteStory } from '../../lib/Database';
-
-import { MessengerContext } from '../../App';
-import { ThreadContext } from '../../lib/Messenger';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCamera } from '@fortawesome/free-solid-svg-icons';
+
+import * as ROUTES from '../../constants/Routes';
+
+import { getMyStories, deleteStory } from '../../lib/Database';
+import { useFbUser } from '../../hooks/useFbUser';
 
 import { Story } from '../../constants/Types';
 import Header from '../../components/Header';
@@ -22,7 +20,6 @@ import './MyStoriesPage.css';
 
 
 const MyStoriesPage: FC<RouteComponentProps> = ({ history }) => {
-  const messengerSDK: any = useContext(MessengerContext);
 
   const [authorID, setAuthorID] = useState<string>('');
   const [stories, setStories] = useState<Story[]>([]);
@@ -49,19 +46,10 @@ const MyStoriesPage: FC<RouteComponentProps> = ({ history }) => {
   }, [])
 
   useEffect(() => {
-    if (messengerSDK) {
-      messengerSDK?.getContext('256197072270291',
-        async ({ psid }: ThreadContext) => {
-          setAuthorID(psid);
-        },
-        (error: any) => {}
-      )
-    }
-  }, [messengerSDK])
-
-  useEffect(() => {
     setMyStories();
   }, [setMyStories])
+
+  useFbUser(setAuthorID)
 
   return (
       <div className="MyStoriesPage">

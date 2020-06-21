@@ -1,15 +1,16 @@
-import React, { useState, useCallback, useEffect, useContext, useMemo } from 'react';
+import React, { useState, useCallback, useEffect, useContext } from 'react';
 import Axios from 'axios';
 
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
+
 import { getLibrary } from '../../lib/Database';
 
 import { MessengerContext } from '../../App';
-import { ThreadContext } from '../../lib/Messenger';
+import { useFbUser } from '../../hooks/useFbUser';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 import { Story } from '../../constants/Types';
 import StoryCard from '../../components/StoryCard';
@@ -24,8 +25,8 @@ const LibraryPage: React.FC<RouteComponentProps> = ({ history }) => {
   const [stories, setStories] = useState<Story[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
 
-  const setLibrary = useMemo(() => {
-    const func = async () => {
+  useEffect(() => {
+    (async () => {
       const library = await getLibrary();
       if (!searchTerm) {
         setStories(library);
@@ -35,9 +36,7 @@ const LibraryPage: React.FC<RouteComponentProps> = ({ history }) => {
           || genre.toLowerCase().includes(searchTerm.toLowerCase()) 
           || description.toLowerCase().includes(searchTerm.toLowerCase())));
       }
-    };
-    func();
-    return func;
+    })();
   }, [searchTerm])
 
   const readStory = useCallback(storyId => {
@@ -52,17 +51,8 @@ const LibraryPage: React.FC<RouteComponentProps> = ({ history }) => {
     }
   }, [messengerSDK, readerID])
 
-  useEffect(() => {
-    if (messengerSDK) {
-      messengerSDK?.getContext('256197072270291',
-        async ({ psid }: ThreadContext) => {
-          setReaderID(psid);
-        },
-        (error: any) => {}
-      )
-    }
-    setLibrary();
-  }, [messengerSDK, setLibrary])
+  useFbUser(setReaderID);
+
 
   return (
     <div className="LibraryPage">
