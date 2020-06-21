@@ -3,7 +3,7 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 import * as ROUTES from '../../constants/Routes';
 
-import { getMyStories, deleteStory } from '../../lib/Database';
+import { getMyStories, deleteStory, newStory } from '../../lib/Database';
 import { useFbUser } from '../../hooks/useFbUser';
 
 import { Story, CreateStoryScheme } from '../../constants/Types';
@@ -37,9 +37,10 @@ const MyStoriesPage: FC<RouteComponentProps> = ({ history }) => {
     setMyStories();
   }, [setMyStories])
 
-  const createStory = useCallback((data: CreateStoryScheme) => {
-    console.log('CREATE: ', data);
-  }, [])
+  const createStory = useCallback(async (data: CreateStoryScheme) => {
+    const story = await newStory(authorID, data);
+    console.log(story);
+  }, [authorID])
 
   useEffect(() => {
     setMyStories();

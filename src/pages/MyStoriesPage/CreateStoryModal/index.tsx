@@ -36,7 +36,6 @@ const CreateStoryModal: React.FC<CreateStoryModalProps> = ({
   const [errors, setErrors] = useState<string[]>([]);
 
   const submit = useCallback(() => {
-    console.log(title, genre, description, imageFile?.name);
     if (!!title && !!genre && !!description && !!imageFile) {
       setErrors([]);
       onSubmit({ title, description, genre, image: imageFile });

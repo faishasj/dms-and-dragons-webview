@@ -40,6 +40,8 @@ export interface Story {
     genre: string;
     title: string;
   };
+  dateCreated: DateTime;
+  dateUpdated: DateTime;
 }
 
 export interface StoryView {

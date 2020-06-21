@@ -1,6 +1,7 @@
 import { firestore } from 'firebase/app';
 import { db } from './Firebase';
-import { Story } from '../constants/Types';
+import { Story, CreateStoryScheme } from '../constants/Types';
+import { uploadFile } from './Storage';
 
 // Database related Utilities
 
@@ -48,8 +49,21 @@ export async function getLibrary(): Promise<Story[]> {
         }));
 }
 
-export async function newStory(story: Story): Promise<void> {
-  return collection(Collection.Stories).doc(story.id).set({})
+export async function newStory(authorId: string, { title, image, genre, description }: CreateStoryScheme): Promise<Story> {
+  const coverPhoto = await uploadFile(image, '/storyCovers');
+
+  const storyData: Partial<Story> = {
+    authorId,
+    published: false,
+    personas: [],
+    metadata: { coverPhoto, title, description, genre, failureMessage: 'What was that?' },
+    dateCreated: newTimestamp(),
+    dateUpdated: newTimestamp(),
+  };
+
+  const { id } = await collection(Collection.Stories).add(storyData);
+
+  return { id, ...storyData } as Story;
 }
 
 export async function deleteStory(storyId: Story['id']): Promise<void> {
