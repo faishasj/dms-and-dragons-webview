@@ -1,4 +1,5 @@
 import Firebase from 'firebase/app';
+import { v4 as uuid } from 'uuid';
 import { storage } from './Firebase';
 import { signInAnon } from './Authentication';
 
@@ -12,7 +13,8 @@ export const uploadFile = async (
 
   await signInAnon();
 
-  const uploadTask = storage.ref(storagePath).child(file.name).put(file);
+  const ext = (file.name.split('.').pop() || '').toLowerCase();
+  const uploadTask = storage.ref(storagePath).child(`${uuid()}.${ext}`).put(file);
 
   uploadTask.on(Firebase.storage.TaskEvent.STATE_CHANGED, ({ bytesTransferred, totalBytes }) => {
     const progress = (bytesTransferred / totalBytes) * 100;
