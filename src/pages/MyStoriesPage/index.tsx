@@ -11,7 +11,7 @@ import Header from '../../components/Header';
 import StoryCard from '../../components/StoryCard';
 import CircleButton from '../../components/CircleButton';
 import DialogModal from '../../components/DialogModal';
-import CreateStoryModal from './CreateStoryModal';
+import CreateStoryModal, { CreateStoryScheme } from './CreateStoryModal';
 import './MyStoriesPage.css';
 
 
@@ -37,7 +37,7 @@ const MyStoriesPage: FC<RouteComponentProps> = ({ history }) => {
     setMyStories();
   }, [setMyStories])
 
-  const createStory = useCallback((data: Story) => {
+  const createStory = useCallback((data: CreateStoryScheme) => {
     console.log('CREATE: ', data);
   }, [])
 

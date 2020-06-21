@@ -6,7 +6,7 @@ import { faCamera } from '@fortawesome/free-solid-svg-icons';
 
 import Modal from '../../../components/Modal';
 import Link from '../../../components/Link';
-import { Story } from '../../../constants/Types';
+import useFileUpload, { PreviewFile, FileError } from '../../../hooks/useFileUpload';
 
 
 const GENRES = [
@@ -24,23 +24,46 @@ const GENRES = [
 
 const CreateStoryModal: React.FC<CreateStoryModalProps> = ({
   onDismiss,
+  onSubmit,
 }) => {
   const [title, setTitle] = useState('');
   const [genre, setGenre] = useState(GENRES[0]);
   const [description, setDescription] = useState('');
+  const [imageFile, setImageFile] = useState<PreviewFile | null>(null);
+
+  const [fileErrors, setFileErrors] = useState<FileError[]>([]);
+  const [errors, setErrors] = useState<string[]>([]);
 
   const submit = useCallback(() => {
-    console.log(title, genre, description);
-  }, [title, genre, description]);
+    console.log(title, genre, description, imageFile?.name);
+    if (!!title && !!genre && !!description && !!imageFile) {
+      setErrors([]);
+      onSubmit({ title, description, genre, image: imageFile });
+    } else {
+      setErrors([
+        !title && 'Must include title',
+        !description && 'Must include description',
+        !genre && 'Must include genre',
+        !imageFile && 'Must include cover image',
+      ].filter(a => a) as string[]);
+    }
+  }, [title, genre, description, imageFile, onSubmit]);
+
+  const { getRootProps, getInputProps } = useFileUpload(setImageFile, setFileErrors);
 
   return (
     <Modal>
       <div className="newStoryForm">
         <div className="title">Create a new story!</div>
+        {errors.map(error => <p className="errorText" key={error}>{error}</p>)}
         <div className="metadata">
           <div className="coverPhotoData">
-            <div className="coverPhotoContainer">
-              <FontAwesomeIcon icon={ faCamera }/>
+            <div {...getRootProps()} className="coverPhotoContainer">
+              <input {...getInputProps()} />
+              {imageFile
+                ? <img className="coverPhoto" alt="Story Cover" src={imageFile.preview} />
+                : <FontAwesomeIcon icon={ faCamera }/>}
+              {fileErrors.map(({ code, message }) => <p className="errorText" key={code}>{message}</p>)}
             </div>
           </div>
           <div className="textData">
@@ -81,9 +104,15 @@ const CreateStoryModal: React.FC<CreateStoryModalProps> = ({
   );
 };
 
+export interface CreateStoryScheme {
+  title: string;
+  description: string;
+  genre: string;
+  image: PreviewFile;
+}
 export interface CreateStoryModalProps {
   onDismiss: () => void;
-  onSubmit: (data: Story) => void;
+  onSubmit: (data: CreateStoryScheme) => void;
 }
 
 export default CreateStoryModal;
