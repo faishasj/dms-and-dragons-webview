@@ -8,7 +8,7 @@ export const useFbUser = (callback: (fbId: string) => void): void => {
   React.useEffect(() => {
     if (process.env.NODE_ENV === 'development') callback('3933693980036784');
     if (messengerSDK) {
-      messengerSDK?.getContext('256197072270291',
+      messengerSDK?.getContext(process.env.REACT_APP_PAGE_ACCESS_TOKEN,
         async ({ psid }: ThreadContext) => {
           callback(psid);
         },
