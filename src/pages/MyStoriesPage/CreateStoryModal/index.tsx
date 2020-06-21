@@ -7,6 +7,7 @@ import { faCamera } from '@fortawesome/free-solid-svg-icons';
 import Modal from '../../../components/Modal';
 import Link from '../../../components/Link';
 import useFileUpload, { PreviewFile, FileError } from '../../../hooks/useFileUpload';
+import { CreateStoryScheme } from '../../../constants/Types';
 
 
 const GENRES = [
@@ -104,12 +105,6 @@ const CreateStoryModal: React.FC<CreateStoryModalProps> = ({
   );
 };
 
-export interface CreateStoryScheme {
-  title: string;
-  description: string;
-  genre: string;
-  image: PreviewFile;
-}
 export interface CreateStoryModalProps {
   onDismiss: () => void;
   onSubmit: (data: CreateStoryScheme) => void;

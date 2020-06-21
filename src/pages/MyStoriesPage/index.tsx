@@ -6,12 +6,12 @@ import * as ROUTES from '../../constants/Routes';
 import { getMyStories, deleteStory } from '../../lib/Database';
 import { useFbUser } from '../../hooks/useFbUser';
 
-import { Story } from '../../constants/Types';
+import { Story, CreateStoryScheme } from '../../constants/Types';
 import Header from '../../components/Header';
 import StoryCard from '../../components/StoryCard';
 import CircleButton from '../../components/CircleButton';
 import DialogModal from '../../components/DialogModal';
-import CreateStoryModal, { CreateStoryScheme } from './CreateStoryModal';
+import CreateStoryModal from './CreateStoryModal';
 import './MyStoriesPage.css';
 
 

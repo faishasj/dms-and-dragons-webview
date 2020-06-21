@@ -1,4 +1,5 @@
 import { firestore } from 'firebase/app';
+import { PreviewFile } from '../hooks/useFileUpload';
 
 // App Wide Data Types
 
@@ -7,6 +8,15 @@ import { firestore } from 'firebase/app';
 
 export type Uri = string;
 export type DateTime = firestore.Timestamp;
+
+// Schemas
+
+export interface CreateStoryScheme {
+  title: string;
+  description: string;
+  genre: string;
+  image: PreviewFile;
+}
 
 // Entities
 
