@@ -1,4 +1,4 @@
-import { firestore } from 'firebase';
+import { firestore } from 'firebase/app';
 import { db } from './Firebase';
 import { Story } from '../constants/Types';
 
