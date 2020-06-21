@@ -7,7 +7,7 @@ import './LandingPage.css';
 const LandingPage: FC = () => {
   return (
     <div className="LandingPage">
-      <img className="logo" src={ DragonLogo }/>
+      <img className="logo" alt="Logo" src={ DragonLogo }/>
     </div>
   )
 }

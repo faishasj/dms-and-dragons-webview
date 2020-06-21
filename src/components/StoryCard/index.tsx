@@ -13,7 +13,7 @@ const StoryCard: FC<StoryCardProps>
       <div className="card"/>
       <div className="data">
         <div className="coverPhotoContainer">
-          <img className="coverPhoto" src={ coverPhoto }/>
+          <img className="coverPhoto" alt="Cover" src={ coverPhoto }/>
         </div>
         <div className="textData"> 
           <div className="title">

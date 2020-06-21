@@ -6,7 +6,7 @@ const Message: React.FC<MessengerProps> = ({ isAuthor, message, name, profilePic
   return (
     <div className={"Message" + (isAuthor ? " author": "")}>
       { profilePicture && !isAuthor && (
-        <img className="authorPic" src={ profilePicture }/>
+        <img className="authorPic" alt="Author" src={ profilePicture }/>
       )}
       <div className="messageBody">
         { name && !isAuthor && (

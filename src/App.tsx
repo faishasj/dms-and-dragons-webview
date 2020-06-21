@@ -26,7 +26,7 @@ function App() {
 
   useEffect(() => {
     getMessengerSDK();
-  }, [])
+  }, [getMessengerSDK]);
 
   return (
     <MessengerContext.Provider value={ messengerSDK }>

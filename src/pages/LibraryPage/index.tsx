@@ -2,7 +2,6 @@ import React, { useState, useCallback, useEffect, useContext, useMemo } from 're
 import Axios from 'axios';
 
 import { withRouter, RouteComponentProps } from 'react-router-dom';
-import * as ROUTES from '../../constants/Routes';
 
 import { getLibrary } from '../../lib/Database';
 
@@ -63,7 +62,7 @@ const LibraryPage: React.FC<RouteComponentProps> = ({ history }) => {
       )
     }
     setLibrary();
-  }, [messengerSDK])
+  }, [messengerSDK, setLibrary])
 
   return (
     <div className="LibraryPage">

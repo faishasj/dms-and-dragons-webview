@@ -36,13 +36,13 @@ const MyStoriesPage: FC<RouteComponentProps> = ({ history }) => {
 
   const editStory = useCallback(storyID => {
     history.push(ROUTES.DM_CREATOR, { storyID });
-  }, [])
+  }, [history])
 
   const deleteMyStory = useCallback(async storyID => {
     await deleteStory(storyID);
     setDeletingStory(null);
     setMyStories();
-  }, [])
+  }, [setMyStories])
 
   const createStory = useCallback(() => {
 
@@ -61,7 +61,7 @@ const MyStoriesPage: FC<RouteComponentProps> = ({ history }) => {
 
   useEffect(() => {
     setMyStories();
-  }, [authorID])
+  }, [setMyStories])
 
   return (
       <div className="MyStoriesPage">
