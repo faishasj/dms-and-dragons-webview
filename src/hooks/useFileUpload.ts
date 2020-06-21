@@ -29,7 +29,7 @@ const useFileUpload = (
         return;
       }
       setErrors([]);
-      setFile({ ...acceptedFile, preview: URL.createObjectURL(acceptedFile) });
+      setFile(Object.assign(acceptedFile, { preview: URL.createObjectURL(acceptedFile) }));
     },
     ...dropzoneOptions,
   });
