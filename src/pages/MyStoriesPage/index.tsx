@@ -42,8 +42,8 @@ const MyStoriesPage: FC<RouteComponentProps> = ({ history }) => {
     setCreatingStory(false);
     const story = await newStory(authorID, data, (progress) => setLoadingProgress(progress));
     setLoadingProgress(null);
-    console.log(story);
-  }, [authorID, setLoadingProgress])
+    history.push(ROUTES.DM_CREATOR, { storyID: story.id });
+  }, [authorID, setLoadingProgress, history])
 
   useEffect(() => {
     setMyStories();
