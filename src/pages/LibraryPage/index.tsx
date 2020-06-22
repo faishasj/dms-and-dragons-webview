@@ -34,15 +34,9 @@ const LibraryPage: React.FC<RouteComponentProps> = () => {
   }, [searchTerm, library])
 
   const readStory = useCallback(storyId => {
-    if (messengerSDK) {
-      messengerSDK.requestCloseBrowser(
-        () => {
-          Axios.post(process.env.REACT_APP_WEBHOOK + '/webview/readStory',
-            { storyId, userId: readerID })
-        }, 
-        () => console.log("ERROR")
-      );
-    }
+    Axios.post(process.env.REACT_APP_WEBHOOK + '/webview/readStory',
+      { storyId, userId: readerID }
+    ).then(() => messengerSDK?.requestCloseBrowser(() => {}, () => {}));
   }, [messengerSDK, readerID])
 
   useEffect(() => {
