@@ -1,12 +1,12 @@
 .Message {
   display: flex;
-  flex-direction: row;
-  align-items: flex-end;
+  flex-direction: column;
+  align-items: flex-start;
   margin-top: 10px;
 }
 
 .Message.author {
-  justify-content: flex-end;
+  align-items: flex-end;
 }
 
 .Message .authorPic {
@@ -35,4 +35,9 @@
 .Message.author .messageText {
   background-color: #0099FF;
   color: white;
+}
+
+.Message .expandedContainer {
+  padding: 2rem;
+  background-color: red;
 }
