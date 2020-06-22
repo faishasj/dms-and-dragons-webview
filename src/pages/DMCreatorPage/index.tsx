@@ -1,27 +1,68 @@
-import React from 'react';
+import React, { useReducer, useCallback } from 'react';
 
 import Header from '../../components/Header';
-import Message from './Message';
+import StepDisplay from './StepDisplay';
+import CircleButton from '../../components/CircleButton';
+import { stepsReducer, newMessage, newStep, Message, Step, Option } from './StepsReducer';
 import './DMCreatorPage.css';
 
 
 const DMCreatorPage: React.FC<DMCreatorPageProps> = ({ storyID }) => {
+  const [steps, dispatch] = useReducer(stepsReducer, []);
+
+  const addStep = useCallback(() => {
+    const root = steps.length <= 0;
+
+    dispatch({ type: 'add', step: newStep(root) });
+  }, [steps]);
+
+  const addMessage = useCallback(() => {
+    if (steps.length === 0) return addStep();
+    const step = steps[steps.length - 1];
+    dispatch({
+      type: 'update',
+      step: { ...step, messages: [...step.messages, newMessage()] },
+    })
+  }, [steps, addStep]);
+
+  const deleteMessage = useCallback((step: Step, messageId: Message['id']) => {
+    const numberOfMessages = step.messages.length;
+    if (numberOfMessages === 1) dispatch({ type: 'delete', step });
+    else dispatch({
+      type: 'update',
+      step: { ...step, messages: step.messages.filter(mess => mess.id !== messageId) },
+    });
+  }, []);
+
+  const deleteOption = useCallback((step: Step, optionId: Option['id']) => {
+    const numberOfOptions = step.messages.length;
+    if (numberOfOptions > 1) console.warn('Can\'t delete only option');
+    else dispatch({
+      type: 'update',
+      step: { ...step, options: step.options.filter(op => op.id !== optionId) },
+    });
+  }, []);
+
+  console.log(steps);
   return (
     <div className="DMCreatorPage">
       <Header pageTitle="DM Creator"/>
       <div className="container">
-        <div className="messengerView">
-          <Message isAuthor={false} profilePicture={"https://www.jennstrends.com/wp-content/uploads/2013/10/bad-profile-pic-2-768x768.jpeg"} message={"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"}/>
-          <Message isAuthor={false} name="Greg" profilePicture={"https://www.jennstrends.com/wp-content/uploads/2013/10/bad-profile-pic-2-768x768.jpeg"} message={"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"}/>
-          <Message isAuthor={false} name="Larry" profilePicture={"https://www.jennstrends.com/wp-content/uploads/2013/10/bad-profile-pic-2-768x768.jpeg"} message={"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"}/>
-          <Message isAuthor={true} profilePicture={"https://www.jennstrends.com/wp-content/uploads/2013/10/bad-profile-pic-2-768x768.jpeg"} message={"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"}/>
-          <Message isAuthor={false} profilePicture={"https://www.jennstrends.com/wp-content/uploads/2013/10/bad-profile-pic-2-768x768.jpeg"} message={"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"}/>
+        {steps.map((step, i) => (
+          <StepDisplay
+            key={`${JSON.stringify(step)} - ${i}`}
+            step={step}
+            onNewMessage={addMessage}
+          />
+        ))}
+        <div className="row">
+          <CircleButton icon="➕" onClick={addMessage} />
+          <CircleButton icon="➕" onClick={addStep} />
         </div>
-        <div className="toolbar"></div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export interface DMCreatorPageProps {
   storyID?: string

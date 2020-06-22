@@ -6,8 +6,11 @@
 
 .DMCreatorPage .container {
   display: flex;
-  flex-direction: column;
   flex: 1;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 1rem;
 }
 
 .DMCreatorPage .messengerView {
@@ -20,4 +23,19 @@
   z-index: 1;
   box-shadow: -5px -1px 18px rgba(0, 0, 0, 0.2);
   flex: 1;
+}
+
+.DMCreatorPage .CircleButton {
+  height: 2rem;
+  width: 2rem;
+  font-size: 1.5rem;
+}
+
+.DMCreatorPage .row {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1rem 0;
 }
