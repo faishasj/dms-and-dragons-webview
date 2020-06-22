@@ -52,6 +52,7 @@ export interface StoryView {
     fbMessageId: string;
     stepId: Step['id'];
     text: string;
+    archived: boolean;
   }[];
   startTime: DateTime;
   endTime: DateTime | null;
