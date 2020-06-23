@@ -1,6 +1,6 @@
 import { firestore } from 'firebase/app';
 import { db } from './Firebase';
-import { Story, CreateStoryScheme, ProgressCallback } from '../constants/Types';
+import { Story, CreateStoryScheme, ProgressCallback, Step } from '../constants/Types';
 import { uploadFile, deleteFile } from './Storage';
 
 // Database related Utilities
@@ -68,6 +68,16 @@ export async function newStory(
   const { id } = await collection(Collection.Stories).add(storyData);
 
   return { id, ...storyData } as Story;
+}
+
+export async function saveStory(story: Story, steps: Step[]) {
+  if (story.authorName) delete story.authorName;
+
+  const storyRef = collection(Collection.Stories).doc(story.id);
+
+  // TODO: Transaction approach
+  await Promise.all(steps.map(({ id, ...step }) => storyRef.collection(SubCollection.Steps).doc(id).set(step)));
+  await storyRef.update(story);
 }
 
 export async function deleteStory({ id, metadata: { coverPhoto } }: Story): Promise<void> {

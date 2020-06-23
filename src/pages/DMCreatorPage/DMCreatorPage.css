@@ -22,7 +22,10 @@
 .DMCreatorPage .toolbar {
   z-index: 1;
   box-shadow: -5px -1px 18px rgba(0, 0, 0, 0.2);
-  flex: 1;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .DMCreatorPage .CircleButton {

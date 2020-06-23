@@ -1,8 +1,10 @@
 import React, { useReducer, useCallback } from 'react';
 
+import { saveStory } from '../../lib/Database';
 import Header from '../../components/Header';
 import StepDisplay from './StepDisplay';
 import CircleButton from '../../components/CircleButton';
+import Link from '../../components/Link';
 import { stepsReducer, newMessage, newStep, Message, Step, Option } from './StepsReducer';
 import './DMCreatorPage.css';
 
@@ -50,6 +52,16 @@ const DMCreatorPage: React.FC<DMCreatorPageProps> = ({ storyID }) => {
     });
   }, []);
 
+  const submit = useCallback(() => {
+    const data = steps.map(step => {
+      const messages = step.messages.map(({ id, ...message }) => message);
+      const options = step.options.map(({ id, ...option }) => option);
+      return { ...step, messages, options };
+    });
+    console.log('SAVE: ', data);
+    // saveStory(story, data);
+  }, [steps]);
+
   console.log(steps);
   return (
     <div className="DMCreatorPage">
@@ -68,6 +80,7 @@ const DMCreatorPage: React.FC<DMCreatorPageProps> = ({ storyID }) => {
           <CircleButton icon="➕" onClick={addStep} />
         </div>
       </div>
+      <div className="toolbar"><Link label="Save" onClick={submit} /></div>
     </div>
   );
 };
