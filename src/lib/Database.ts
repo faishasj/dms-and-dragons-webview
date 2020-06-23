@@ -55,6 +55,7 @@ export async function newStory(
   onProgress?: ProgressCallback,
 ): Promise<Story> {
   const coverPhoto = await uploadFile(image, '/storyCovers', onProgress);
+  URL.revokeObjectURL(image.preview);
 
   const storyData: Partial<Story> = {
     authorId,
