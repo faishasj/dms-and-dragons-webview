@@ -23,7 +23,7 @@ const MessageDisplay: React.FC<MessageDisplayProps> = ({
         if (expanded) onUpdate?.({ ...message, text, image, typingTime: typeTime, waitingTime: waitTime });
         }}>
         {name && !isAuthor && <div className="authorName">{name}</div>}
-        <input className="messageText" type="textarea" value={text} onChange={e => setText(e.target.value)} />
+        <input className="messageText" type="textarea" disabled={isAuthor} value={text} onChange={e => setText(e.target.value)} />
       </div>
       {(expanded && !isAuthor) && (
         <div className="expandedContainer">
