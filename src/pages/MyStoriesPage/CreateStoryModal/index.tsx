@@ -45,7 +45,7 @@ const CreateStoryModal: React.FC<CreateStoryModalProps> = ({
         ...story,
         metadata: { ...story.metadata, title, description, genre },
       }, imageFile);
-      else onSubmit({ title, description, genre, image: imageFile });
+      else if (onSubmit) onSubmit({ title, description, genre, image: imageFile });
     } else {
       setErrors([
         !title && 'Must include title',
@@ -113,7 +113,7 @@ const CreateStoryModal: React.FC<CreateStoryModalProps> = ({
 
 export interface CreateStoryModalProps {
   onDismiss: () => void;
-  onSubmit: (data: CreateStoryScheme) => void;
+  onSubmit?: (data: CreateStoryScheme) => void;
   onEdit?: (story: Story, newImage?: PreviewFile) => void;
   story?: Story;
 }
