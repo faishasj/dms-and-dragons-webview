@@ -30,6 +30,28 @@
   border-radius: 1.3em;
   background-color: #f1f0f0;
   padding: 6px 12px 7px;
+
+  -webkit-writing-mode: horizontal-tb !important;
+  text-rendering: auto;
+  color: -internal-light-dark-color(black, white);
+  letter-spacing: normal;
+  word-spacing: normal;
+  text-transform: none;
+  text-indent: 0px;
+  text-shadow: none;
+  display: inline-block;
+  text-align: start;
+  -webkit-appearance: textfield;
+  background-color: -internal-light-dark-color(rgb(255, 255, 255), rgb(59, 59, 59));
+  -webkit-rtl-ordering: logical;
+  cursor: text;
+  margin: 0em;
+  font: 400 13.3333px Arial;
+  border-width: 0px;
+  border-style: none;
+  outline: none;
+  border-image: initial;
+  width: fit-content;
 }
 
 .Message.author .messageText {
@@ -38,6 +60,14 @@
 }
 
 .Message .expandedContainer {
-  padding: 2rem;
-  background-color: red;
+  padding: 1rem;
+  border: 1px black solid;
+}
+
+.Message .expandedContainer .row {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 0;
 }

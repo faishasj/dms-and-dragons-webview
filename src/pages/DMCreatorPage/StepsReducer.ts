@@ -11,8 +11,8 @@ export interface Step extends DBStep {
 }
 export const newMessage = (): Message => ({
   id: uuid(),
-  typingTime: 0,
-  waitingTime: 0,
+  typingTime: 1000,
+  waitingTime: 1000,
   image: undefined,
   text: 'MESSAGE',
   personaId: undefined,

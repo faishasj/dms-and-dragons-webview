@@ -43,6 +43,13 @@ const DMCreatorPage: React.FC<DMCreatorPageProps> = ({ storyID }) => {
     });
   }, []);
 
+  const updateMessage = useCallback((step: Step, message: Partial<Message>) => {
+    dispatch({
+      type: 'update',
+      step: { ...step, messages: step.messages.map(mess => mess.id === message.id ? { ...mess, ...message } : mess) },
+    });
+  }, []);
+
   console.log(steps);
   return (
     <div className="DMCreatorPage">
@@ -53,6 +60,7 @@ const DMCreatorPage: React.FC<DMCreatorPageProps> = ({ storyID }) => {
             key={`${JSON.stringify(step)} - ${i}`}
             step={step}
             onNewMessage={addMessage}
+            onUpdateMessage={updateMessage}
           />
         ))}
         <div className="row">
