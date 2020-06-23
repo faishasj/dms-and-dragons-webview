@@ -7,7 +7,7 @@ import { faCamera } from '@fortawesome/free-solid-svg-icons';
 import Modal from '../../../components/Modal';
 import Link from '../../../components/Link';
 import useFileUpload, { PreviewFile, FileError } from '../../../hooks/useFileUpload';
-import { CreateStoryScheme } from '../../../constants/Types';
+import { CreateStoryScheme, Story } from '../../../constants/Types';
 
 
 const GENRES = [
@@ -26,11 +26,14 @@ const GENRES = [
 const CreateStoryModal: React.FC<CreateStoryModalProps> = ({
   onDismiss,
   onSubmit,
+  onEdit,
+  story,
 }) => {
-  const [title, setTitle] = useState('');
-  const [genre, setGenre] = useState(GENRES[0]);
-  const [description, setDescription] = useState('');
+  const [title, setTitle] = useState(story?.metadata.title || '');
+  const [genre, setGenre] = useState(story?.metadata.genre || GENRES[0]);
+  const [description, setDescription] = useState(story?.metadata.description || '');
   const [imageFile, setImageFile] = useState<PreviewFile | null>(null);
+  const [existingImage] = useState(story?.metadata.coverPhoto);
 
   const [fileErrors, setFileErrors] = useState<FileError[]>([]);
   const [errors, setErrors] = useState<string[]>([]);
@@ -38,7 +41,11 @@ const CreateStoryModal: React.FC<CreateStoryModalProps> = ({
   const submit = useCallback(() => {
     if (!!title && !!genre && !!description && !!imageFile) {
       setErrors([]);
-      onSubmit({ title, description, genre, image: imageFile });
+      if (story && onEdit) onEdit({
+        ...story,
+        metadata: { ...story.metadata, title, description, genre },
+      }, imageFile);
+      else onSubmit({ title, description, genre, image: imageFile });
     } else {
       setErrors([
         !title && 'Must include title',
@@ -47,7 +54,7 @@ const CreateStoryModal: React.FC<CreateStoryModalProps> = ({
         !imageFile && 'Must include cover image',
       ].filter(a => a) as string[]);
     }
-  }, [title, genre, description, imageFile, onSubmit]);
+  }, [title, genre, description, imageFile, story, onSubmit, onEdit]);
 
   const { getRootProps, getInputProps } = useFileUpload(setImageFile, setFileErrors);
 
@@ -60,8 +67,8 @@ const CreateStoryModal: React.FC<CreateStoryModalProps> = ({
           <div className="coverPhotoData">
             <div {...getRootProps()} className="coverPhotoContainer">
               <input {...getInputProps()} />
-              {imageFile
-                ? <img className="coverPhoto" alt="Story Cover" src={imageFile.preview} />
+              {(imageFile || existingImage)
+                ? <img className="coverPhoto" alt="Story Cover" src={existingImage || imageFile?.preview} />
                 : <FontAwesomeIcon icon={ faCamera }/>}
               {fileErrors.map(({ code, message }) => <p className="errorText" key={code}>{message}</p>)}
             </div>
@@ -107,6 +114,8 @@ const CreateStoryModal: React.FC<CreateStoryModalProps> = ({
 export interface CreateStoryModalProps {
   onDismiss: () => void;
   onSubmit: (data: CreateStoryScheme) => void;
+  onEdit?: (story: Story, newImage?: PreviewFile) => void;
+  story?: Story;
 }
 
 export default CreateStoryModal;
