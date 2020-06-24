@@ -1,6 +1,7 @@
 import { firestore } from 'firebase/app';
+import Axios from 'axios';
 import { db } from './Firebase';
-import { Story, CreateStoryScheme, ProgressCallback, Step } from '../constants/Types';
+import { Story, CreateStoryScheme, ProgressCallback, Step, Persona } from '../constants/Types';
 import { uploadFile, deleteFile } from './Storage';
 import { PreviewFile } from '../hooks/useFileUpload';
 
@@ -141,3 +142,15 @@ export async function deleteStory({ id, metadata: { coverPhoto } }: Story): Prom
   await deleteFile(coverPhoto);
   return collection(Collection.Stories).doc(id).delete();
 }
+
+
+export const createPersona = async (name: string, profilePic: string): Promise<Persona> => {
+  const token = process.env.REACT_APP_PAGE_ACCESS_TOKEN;
+
+  const { data: { id } } = await Axios.post<{ id: string }>('https://graph.facebook.com/me/personas', {
+    name,
+    profile_picture_url: profilePic,
+  }, { params: { access_token: token } });
+
+  return { id, name, profilePic };
+};
