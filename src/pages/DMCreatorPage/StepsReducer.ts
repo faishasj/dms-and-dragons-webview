@@ -35,23 +35,28 @@ export const newStep = (root = false): Step => ({
 
 export type StepAction =
   | { type: 'set'; steps: Step[] }
-  | { type: 'add'; step: Step }
+  | { type: 'add'; step: Step; index?: number }
   | { type: 'delete'; step: Step }
   | { type: 'update'; step: Partial<Step> };
 export function stepsReducer(state: Step[], action: StepAction) {
   switch (action.type) {
     case 'set': return action.steps;
     case 'add': {
-      let newSteps = state.slice();
-      if (newSteps.length > 0) { // Link previous step to this step
-        const previous = newSteps[newSteps.length - 1];
-        newSteps[newSteps.length - 1] = {
-          ...previous,
-          options: [...previous.options, newOption(action.step.id)],
-        };
+      if (!!action.index || action.index === 0) {
+        // Not updating anything else
+        return [...state.slice(0, action.index), action.step, ...state.slice(action.index + 1)];
+      } else  {
+        let newSteps = state.slice();
+        if (newSteps.length > 0) { // Link previous step to this step
+          const previous = newSteps[newSteps.length - 1];
+          newSteps[newSteps.length - 1] = {
+            ...previous,
+            options: [...previous.options, newOption(action.step.id)],
+          };
+        }
+        newSteps.push(action.step);
+        return newSteps;
       }
-      newSteps.push(action.step);
-      return newSteps;
     }
     case 'delete': {
       const index = state.findIndex(step => step.id === action.step.id);
