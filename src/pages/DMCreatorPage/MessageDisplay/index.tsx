@@ -5,6 +5,7 @@ import ContentEditable from 'react-contenteditable';
 import useFileUpload, { FileError } from '../../../hooks/useFileUpload';
 import { Message } from '../StepsReducer';
 import Link from '../../../components/Link';
+import FacebookUser from '../../../assets/facebook-user.jpg';
 import './Message.css';
 
 
@@ -35,7 +36,7 @@ const MessageDisplay: React.FC<MessageDisplayProps> = ({
 
   return (
     <div className="Message">
-      {profilePicture && <img className="authorPic" alt="Author" src={profilePicture}/>}
+      {<img className="authorPic" alt="Author" src={profilePicture || FacebookUser}/>}
       <div>
         <div className="messageBody" onClick={() => setExpanded(!expanded)}>
           {name && <div className="authorName">{name}</div>}
