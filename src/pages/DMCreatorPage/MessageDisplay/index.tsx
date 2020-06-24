@@ -18,7 +18,7 @@ const MessageDisplay: React.FC<MessageDisplayProps> = ({
     return update(key, (value * 1000) || 0);
   }, [update]);
 
-  const waitTime = (message?.waitingTime || 0) / 1000;
+  const waitTime = useMemo(() => (message?.waitingTime || 0) / 1000, [message]);
   const typeTime = useMemo(() => (message?.typingTime || 0) / 1000, [message]);
 
   return (
@@ -26,12 +26,13 @@ const MessageDisplay: React.FC<MessageDisplayProps> = ({
       {profilePicture && <img className="authorPic" alt="Author" src={profilePicture}/>}
       <div className="messageBody" onClick={() => setExpanded(!expanded)}>
         {name && <div className="authorName">{name}</div>}
-        
-        <ContentEditable
-          className="messageText" 
-          html={messageText || message?.text || ''}
-          onChange={e => update('text', e.target.value)}
-        />
+        {message?.image ? <img className="messageImage" alt="Message Content" src={message.image} /> : (
+          <ContentEditable
+            className="messageText" 
+            html={messageText || message?.text || ''}
+            onChange={e => update('text', e.target.value)}
+          />
+        )}
       </div>
 
       {expanded && (

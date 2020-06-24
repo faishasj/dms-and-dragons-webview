@@ -18,6 +18,11 @@
   color: rgba(0, 0, 0, .40);
 }
 
+.Message .messageImage {
+  width: 50%;
+  border-radius: 18px;
+}
+
 .Message .messageText {
   outline: none;
   border-radius: 1.3em;
