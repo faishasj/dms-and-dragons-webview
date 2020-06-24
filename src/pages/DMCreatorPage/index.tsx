@@ -12,24 +12,27 @@ import CreateStoryModal from '../../components/CreateStoryModal';
 import StepDisplay from './StepDisplay';
 import { stepsReducer, newMessage, newStep, Message, Step, Option, newOption, convertSteps, parseSteps, traverseSteps } from './StepsReducer';
 import './DMCreatorPage.css';
+import Modal from '../../components/Modal';
 
 
 const DMCreatorPage: React.FC<DMCreatorPageProps> = () => {
   const [steps, dispatch] = useReducer(stepsReducer, []);
 
-  const { state: { story: initStory } } = useLocation<DMCreatorPageLocData>();
+  const { state } = useLocation<DMCreatorPageLocData>();
+  const { story: initStory } = state || { story: {} };
 
   const [story, setStory] = useState(initStory);
   const [editingMeta, setEditingMeta] = useState<Boolean>(false);
   const [loadingProgress, setLoadingProgress] = useState<number | null>(null);
 
-
+  const { id: storyId } = story || {};
   useEffect(() => {
-    getStorySteps(story.id).then(traverseSteps).then(parseSteps).then(steps => dispatch({
-      type: 'set',
-      steps,
-    }));
-  }, []);
+    if (storyId) 
+      getStorySteps(storyId).then(traverseSteps).then(parseSteps).then(steps => dispatch({
+        type: 'set',
+        steps,
+      }));
+  }, [storyId]);
 
 
   const addStep = useCallback(() => {
@@ -104,6 +107,7 @@ const DMCreatorPage: React.FC<DMCreatorPageProps> = () => {
       <Header pageTitle="DM Creator" settingsCallback={() => setEditingMeta(true)}/>
       <div className="container">
         {loadingProgress !== null && <LoadingModal progress={loadingProgress} />}
+        {!storyId && <Modal><p>No Story</p></Modal>}
 
         {steps.map((step, i) => (
           <StepDisplay
