@@ -23,6 +23,13 @@
   border-radius: 18px;
 }
 
+.Message .errorText {
+  font-size: 0.7rem;
+  color: #e24c4c;
+  text-align: center;
+  margin-bottom: 0;
+}
+
 .Message .messageText {
   outline: none;
   border-radius: 1.3em;

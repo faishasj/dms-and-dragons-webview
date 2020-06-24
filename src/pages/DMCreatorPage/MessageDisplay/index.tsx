@@ -2,7 +2,9 @@ import React, { useState, useCallback, useMemo } from 'react';
 
 import ContentEditable from 'react-contenteditable';
 
+import useFileUpload, { FileError } from '../../../hooks/useFileUpload';
 import { Message } from '../StepsReducer';
+import Link from '../../../components/Link';
 import './Message.css';
 
 
@@ -11,6 +13,7 @@ const MessageDisplay: React.FC<MessageDisplayProps> = ({
   message, onUpdate
 }) => {
   const [expanded, setExpanded] = useState(false);
+  const [fileErrors, setFileErrors] = useState<FileError[]>([]);
 
   const update = useCallback((key: keyof Message, value: any) => onUpdate?.({ ...message, [key]: value }), [message, onUpdate]);
   const updateTime = useCallback((key: keyof Message, value: number) => {
@@ -18,15 +21,24 @@ const MessageDisplay: React.FC<MessageDisplayProps> = ({
     return update(key, (value * 1000) || 0);
   }, [update]);
 
+  const removeImage = useCallback(() => {
+    update('imageFile', null);
+    if (message?.imageFile) URL.revokeObjectURL(message.imageFile.preview);
+  }, [message?.imageFile, update]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const waitTime = useMemo(() => (message?.waitingTime || 0) / 1000, [message]);
   const typeTime = useMemo(() => (message?.typingTime || 0) / 1000, [message]);
 
+  const image = message?.imageFile ? message?.imageFile.preview : message?.image;
+
+  const { open, getInputProps } = useFileUpload(imageFile => update('imageFile', imageFile), setFileErrors);
+
   return (
-    <div className={"Message"}>
+    <div className="Message">
       {profilePicture && <img className="authorPic" alt="Author" src={profilePicture}/>}
       <div className="messageBody" onClick={() => setExpanded(!expanded)}>
         {name && <div className="authorName">{name}</div>}
-        {message?.image ? <img className="messageImage" alt="Message Content" src={message.image} /> : (
+        {image ? <img className="messageImage" alt="Message Content" src={image} /> : (
           <ContentEditable
             className="messageText" 
             html={messageText || message?.text || ''}
@@ -37,6 +49,10 @@ const MessageDisplay: React.FC<MessageDisplayProps> = ({
 
       {expanded && (
         <div className="expandedContainer">
+          <Link label="Add Image" onClick={open} />
+          {message?.imageFile && <Link label="Remove Image" onClick={removeImage} />}
+          <input {...getInputProps()} />
+          {fileErrors.map(error => <p className="errorText" key={error.code}>{error.message}</p>)}
           <div className="row">
             <div>Wait </div>
               <input

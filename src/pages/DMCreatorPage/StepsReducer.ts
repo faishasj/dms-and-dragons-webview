@@ -1,9 +1,13 @@
 import { v4 as uuid } from 'uuid';
 import { Step as DBStep } from "../../constants/Types";
+import { PreviewFile } from '../../hooks/useFileUpload';
 
 
 
-export type Message = DBStep['messages'][0] & { id: string }; // Attach ID for deleting and updating
+export type Message = DBStep['messages'][0] & {
+  id: string; // Attach ID for deleting and updating
+  imageFile: PreviewFile | null; // New image file to upload before saving
+};
 export type Option = DBStep['options'][0] & { id: string }; // Attach ID for deleting and updating
 export interface Step extends DBStep {
   messages: Message[];
@@ -15,6 +19,7 @@ export const newMessage = (): Message => ({
   waitingTime: 1000,
   image: undefined,
   text: '',
+  imageFile: null,
   personaId: undefined,
 });
 export const newOption = (stepId: Step['id']): Option => ({ // Option must point to a next step
@@ -96,7 +101,7 @@ export function traverseSteps(steps: (Step | DBStep)[]): (Step | DBStep)[] {
 export function parseSteps(steps: DBStep[]): Step[] {
   return steps.map(step => ({
     ...step,
-    messages: step.messages.map(message => ({ ...message, id: uuid() })),
+    messages: step.messages.map(message => ({ ...message, id: uuid(), imageFile: null })),
     options: step.options.map(option => ({ ...option, id: uuid() })),
   }));
 }
@@ -104,12 +109,12 @@ export function parseSteps(steps: DBStep[]): Step[] {
 /** Convert Steps to DBSteps */
 export function convertSteps(steps: Step[]): DBStep[] {
   return steps.map(step => {
-    const messages = step.messages.map(({ id, ...message }) => message);
+    const messages = step.messages.map(({ id, imageFile, text, image, ...message }) => image ? ({ ...message, image }) : ({ ...message, text }));
     const options = step.options.filter(option => step.options.length === 1 || option.requiredText !== '')
       .map(({ id, ...option }, _, { length: newLength }) => ({
-      ...option,
-      requiredText: newLength === 1 ? '' : option.requiredText,
-    }));
+        ...option,
+        requiredText: newLength === 1 ? '' : option.requiredText,
+      }));
     return { ...step, messages, options };
   });
 }

@@ -81,8 +81,37 @@ export async function newStory(
   return { id, ...storyData } as Story;
 }
 
+/**
+ * Take an array of Steps (with the message ID's), and an array of image change definitions
+ * Uploads all the new files and places the new URLs in the messages
+ */
+export async function uploadMessageFiles(
+  storyId: Story['id'],
+  steps: any[], // Step[], Steps with extra ID's and values defined for the DMs Creator
+  changes: { stepId: Step['id']; id: string; newImage: PreviewFile; oldUrl: string }[],
+) {
+  const results = await Promise.all(changes.map(async ({ stepId, id, newImage, oldUrl }) => {
+    const newUrl = await uploadFile(newImage, `/stories/${storyId}/`);
+    if (oldUrl) deleteFile(oldUrl);
+    URL.revokeObjectURL(newImage.preview);
+    return { stepId, id, newUrl };
+  }));
+  return steps.map(step => {
+    if (!results.map(r => r.stepId).includes(step.id)) return step;
+    return {
+      ...step,
+      messages: step.messages.map((message: any) => {
+        if (!results.map(r => r.id).includes(message.id)) return message;
+        const { newUrl } = results.find(r => r.id === message.id) || {};
+        return { ...message, image: newUrl };
+      })
+    }
+  });
+}
+
 export async function saveStoryWithSteps(story: Story, steps: Step[]) {
   if (story.authorName) delete story.authorName;
+  story.dateUpdated = firestore.Timestamp.now();
   return console.log('SAVE: ', story, steps);
   const storyRef = collection(Collection.Stories).doc(story.id);
 
@@ -97,6 +126,7 @@ export async function saveStory(
   onProgress?: ProgressCallback,
 ): Promise<Story> {
   const { coverPhoto } = data.metadata;
+  data.dateUpdated = firestore.Timestamp.now();
   if (newImage) {
     const newPhoto = await uploadFile(newImage, '/storyCovers', onProgress);
     URL.revokeObjectURL(newImage.preview);

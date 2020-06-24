@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 
 import { Story } from '../../constants/Types';
 import { PreviewFile } from '../../hooks/useFileUpload';
-import { saveStory, saveStoryWithSteps, getStorySteps } from '../../lib/Database';
+import { saveStory, saveStoryWithSteps, getStorySteps, uploadMessageFiles } from '../../lib/Database';
 
 import Header from '../../components/Header';
 import Link from '../../components/Link';
@@ -91,10 +91,21 @@ const DMCreatorPage: React.FC<DMCreatorPageProps> = () => {
     });
   }, []);
 
-  const submit = useCallback(() => {
-    const data = convertSteps(steps);
-    saveStoryWithSteps(story, data);
-  }, [steps, story]);
+  const submit = useCallback(async () => {
+    let newSteps: Step[] = steps;
+    const imageChanges = steps // { stepId, id, old, new }
+      .map(step => step.messages.map(({ id, imageFile, image }) => ({ stepId: step.id, id, newImage: imageFile, oldUrl: image })))
+      .reduce((a, b) => [...a, ...b], [])
+      .filter(a => a.newImage); // Only interested if there is a new image
+    if (imageChanges.length > 0) {
+      setLoading(true);
+      newSteps = await uploadMessageFiles(storyId, steps, imageChanges as any);
+    }
+    const data = convertSteps(newSteps);
+    await saveStoryWithSteps(story, data);
+    dispatch({ type: 'set', steps: newSteps });
+    setLoading(false);
+  }, [steps, story, storyId]);
 
   const editStory = useCallback(async (story: Story, newImage?: PreviewFile) => {
     setEditingMeta(false);
