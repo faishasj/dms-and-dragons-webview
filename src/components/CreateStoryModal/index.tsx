@@ -28,6 +28,7 @@ const GENRES = [
 const CreateStoryModal: React.FC<CreateStoryModalProps> = ({
   onDismiss,
   onSubmit,
+  onSubmitPersona,
   onEdit,
   story,
 }) => {
@@ -112,7 +113,8 @@ const CreateStoryModal: React.FC<CreateStoryModalProps> = ({
         <div>
           <div><label htmlFor="personas">PERSONAS</label></div>
           {story?.personas.map(persona => <PersonaDisplay key={persona.id} persona={persona} />)}
-          <Link label="NEW PERSONA" onClick={() => console.log('NEW')} />
+          <div><label htmlFor="personas">NEW PERSONA</label></div>
+          <PersonaDisplay onSubmitPersona={onSubmitPersona} />
         </div>
 
         <div className="buttons">
@@ -127,6 +129,7 @@ const CreateStoryModal: React.FC<CreateStoryModalProps> = ({
 export interface CreateStoryModalProps {
   onDismiss: () => void;
   onSubmit?: (data: CreateStoryScheme) => void;
+  onSubmitPersona?: (name: string, imageFile: PreviewFile) => void;
   onEdit?: (story: Story, newImage?: PreviewFile) => void;
   story?: Story;
 }

@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 
 import { Story, Persona } from '../../constants/Types';
 import { PreviewFile } from '../../hooks/useFileUpload';
-import { saveStory, saveStoryWithSteps, getStorySteps, uploadMessageFiles } from '../../lib/Database';
+import { saveStory, saveStoryWithSteps, getStorySteps, uploadMessageFiles, createPersona } from '../../lib/Database';
 
 import Header from '../../components/Header';
 import Link from '../../components/Link';
@@ -113,7 +113,7 @@ const DMCreatorPage: React.FC<DMCreatorPageProps> = () => {
     setLoadingProgress(null);
   }, [setLoadingProgress]);
 
-  const setPersona = (persona?: Persona) => {
+  const setPersona = useCallback((persona?: Persona) => {
     const { id: personaId } = persona || { id: '' };
     const step = steps.find(s => s.messages.map(m => m.id).includes(messageAddingPersona?.id || ''));
     if (!step) return console.warn('Couldn\'t find step where persona adding message lives');
@@ -125,7 +125,14 @@ const DMCreatorPage: React.FC<DMCreatorPageProps> = () => {
       }
     });
     setMessageAddingPersona(null);
-  };
+  }, [messageAddingPersona, steps]);
+
+  const newPersona = useCallback(async (name: string, imageFile: PreviewFile) => {
+    setLoading(true);
+    const persona = await createPersona(story, name, imageFile);
+    setStory({ ...story, personas: [...story.personas, persona] });
+    setLoading(false);
+  }, [story]);
 
 
   return (
@@ -157,8 +164,10 @@ const DMCreatorPage: React.FC<DMCreatorPageProps> = () => {
        {editingMeta && (
         <CreateStoryModal 
           onDismiss={() => setEditingMeta(false)} 
+          onSubmitPersona={newPersona}
           onEdit={editStory} 
-          story={ story }/>
+          story={ story }
+        />
       )}
       {!!messageAddingPersona && (
         <Modal>
