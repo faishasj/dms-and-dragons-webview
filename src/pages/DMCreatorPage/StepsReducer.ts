@@ -3,7 +3,6 @@ import { Step as DBStep } from "../../constants/Types";
 import { PreviewFile } from '../../hooks/useFileUpload';
 
 
-
 export type Message = DBStep['messages'][0] & {
   id: string; // Attach ID for deleting and updating
   imageFile: PreviewFile | null; // New image file to upload before saving
@@ -12,6 +11,7 @@ export type Option = DBStep['options'][0] & { id: string }; // Attach ID for del
 export interface Step extends DBStep {
   messages: Message[];
   options: Option[];
+  branch?: Option['id'];
 }
 export const newMessage = (): Message => ({
   id: uuid(),
@@ -44,7 +44,8 @@ export function stepsReducer(state: Step[], action: StepAction) {
     case 'add': {
       if (!!action.index || action.index === 0) {
         // Not updating anything else
-        return [...state.slice(0, action.index), action.step, ...state.slice(action.index + 1)];
+        console.log([...state.slice(0, action.index + 1), action.step, ...state.slice(action.index + 2)])
+        return [...state.slice(0, action.index + 1), action.step, ...state.slice(action.index + 1)];
       } else  {
         let newSteps = state.slice();
         if (newSteps.length > 0) { // Link previous step to this step
@@ -107,12 +108,13 @@ export function parseSteps(steps: DBStep[]): Step[] {
     ...step,
     messages: step.messages.map(message => ({ ...message, id: uuid(), imageFile: null })),
     options: step.options.map(option => ({ ...option, id: uuid() })),
+    branch: step.options[0]?.stepId,
   }));
 }
 
 /** Convert Steps to DBSteps */
 export function convertSteps(steps: Step[]): DBStep[] {
-  return steps.map(step => {
+  return steps.map(({ branch, ...step }) => {
     const messages = step.messages.map(({ id, imageFile, text, image, ...message }) => image ? ({ ...message, image }) : ({ ...message, text }));
     const options = step.options.filter(option => step.options.length === 1 || option.requiredText !== '')
       .map(({ id, ...option }, _, { length: newLength }) => ({
@@ -123,3 +125,23 @@ export function convertSteps(steps: Step[]): DBStep[] {
   });
 }
 
+export function displaySteps(steps: Step[]): Step[] {
+  console.log(steps);
+  const displayedSteps = [];
+  let i = 0;
+  while (i < steps.length) {
+    displayedSteps.push(steps[i]);
+    if (steps[i].options.length === 1) {
+      i += 1;
+    } else {
+      for (let j = i + 1; j <= i + steps[i].options.length; j++) {
+        if (steps[j].id === steps[i].branch) {
+          displayedSteps.push(steps[j]);
+          break;
+        }
+      }
+      i += steps[i].options.length + 1;
+    }
+  }
+  return displayedSteps;
+}

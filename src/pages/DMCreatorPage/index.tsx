@@ -7,12 +7,12 @@ import { saveStory, saveStoryWithSteps, getStorySteps, uploadMessageFiles, creat
 
 import Header from '../../components/Header';
 import Link from '../../components/Link';
+import Modal from '../../components/Modal';
 import LoadingModal from '../../components/LoadingModal';
 import CreateStoryModal from '../../components/CreateStoryModal';
-import Modal from '../../components/Modal';
 import PersonaDisplay from '../../components/PersonaDisplay';
 import StepDisplay from './StepDisplay';
-import { stepsReducer, newMessage, newStep, Message, Step, Option, newOption, convertSteps, parseSteps, traverseSteps } from './StepsReducer';
+import { stepsReducer, newMessage, newStep, Message, Step, Option, newOption, convertSteps, parseSteps, traverseSteps, displaySteps } from './StepsReducer';
 import './DMCreatorPage.css';
 
 
@@ -70,11 +70,33 @@ const DMCreatorPage: React.FC<DMCreatorPageProps> = () => {
   }, []);
 
   const addOption = useCallback((step: Step) => {
+    const newChildStep = newStep();
+
     dispatch({
-      type: 'update',
-      step: { ...step, options: [...step.options, newOption(step.id)]}
+      type: 'add',
+      index: steps.findIndex(s => s.id === step.id),
+      step: { ...newChildStep, options: [newOption(step.options[0].stepId)] }
     })
-  }, []);
+
+    if (step.options.length === 1) {
+      const newFirstStep = newStep();
+      dispatch({
+        type: 'add',
+        index: steps.findIndex(s => s.id === step.id),
+        step: { ...newFirstStep, options: [newOption(step.options[0].stepId)] }
+      })
+
+      dispatch({
+        type: 'update',
+        step: { ...step, options: [newOption(newFirstStep.id), newOption(newChildStep.id)]}
+      });
+    } else {
+      dispatch({
+        type: 'update',
+        step: { ...step, options: [...step.options, {...newOption(newChildStep.id)}]}
+      });
+    }
+  }, [steps]);
 
   const updateOption = useCallback((step: Step, option: Partial<Option>) => {
     dispatch({
@@ -143,17 +165,19 @@ const DMCreatorPage: React.FC<DMCreatorPageProps> = () => {
         {(loading || loadingProgress !== null) && <LoadingModal progress={loadingProgress || undefined} />}
         {!storyId && <Modal><p>No Story</p></Modal>}
 
-        {steps.map((step, i) => (
+        {displaySteps(steps).map((step, i, array) => (
           <StepDisplay
             key={step.id}
             step={step}
             personas={personas}
+            isBranch={i > 0 && array[i-1].options.length > 1}
             onNewMessage={addMessage}
             onUpdateMessage={updateMessage}
             onAddOption={addOption}
             onUpdateOption={updateOption}
             onDeleteOption={deleteOption}
             onEditPersona={setMessageAddingPersona}
+            onSetBranch={(step, option) => dispatch({ type: 'update', step: { ...step, branch: option.stepId }})}
           />
         ))}
 
@@ -181,7 +205,7 @@ const DMCreatorPage: React.FC<DMCreatorPageProps> = () => {
         </Modal>
       )}
       </div>
-      <div className="toolbar"><Link label="Save" onClick={submit} /></div>
+      <div className="toolbar"><Link label="SAVE STORY" onClick={submit} /></div>
     </div>
   );
 };

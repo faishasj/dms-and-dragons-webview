@@ -21,11 +21,18 @@
 
 .DMCreatorPage .toolbar {
   z-index: 1;
+  position: sticky;
+  bottom: 0;
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: white;
   box-shadow: -5px -1px 18px rgba(0, 0, 0, 0.2);
-  padding: 2rem;
+  padding: 1.5rem;
+}
+
+.DMCreatorPage .toolbar .Link {
+  font-size: 1.15rem;
 }
 
 .DMCreatorPage .CircleButton {
@@ -53,16 +60,16 @@
 
 .DMCreatorPage .personaButton {
   position: absolute;
+  right: 1rem;
   height: 2rem;
   width: 2rem;
-  right: 1rem;
 }
 
 .DMCreatorPage .personaImage {
-  height: 2rem;
-  width: 2rem;
   border-radius: 18px;
   margin-right: 8px;
+  height: 2rem;
+  width: 2rem;
 }
 
 .DMCreatorPage .cancelButton {

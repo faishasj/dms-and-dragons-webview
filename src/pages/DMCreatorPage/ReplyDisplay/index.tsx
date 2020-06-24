@@ -18,6 +18,10 @@ const ReplyDisplay: FC<ReplyDisplay> = ({
     setSelectedOption(updatedOption || options[0]);
   }, [options])
 
+  useEffect(() => {
+    setSelectedOption(selectedOption);
+  }, [selectedOption])
+
   useEffect(() => onSelectOption(selectedOption), [selectedOption]);
   
   return (
@@ -29,7 +33,7 @@ const ReplyDisplay: FC<ReplyDisplay> = ({
       <div className="options">
       { expanded && (
         <>
-          {options.map((option, i) => (
+          {options.length > 1 && options.map((option, i) => (
             <div key={option.id} className={"option " + (option.id === selectedOption.id && "selected")}>
               <ContentEditable 
                 key={ option.id }
