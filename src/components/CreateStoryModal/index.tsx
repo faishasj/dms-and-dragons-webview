@@ -4,10 +4,10 @@ import React, { useState, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCamera } from '@fortawesome/free-solid-svg-icons';
 
-import Modal from '../../../components/Modal';
-import Link from '../../../components/Link';
-import useFileUpload, { PreviewFile, FileError } from '../../../hooks/useFileUpload';
-import { CreateStoryScheme, Story } from '../../../constants/Types';
+import Modal from '../Modal';
+import Link from '../Link';
+import useFileUpload, { PreviewFile, FileError } from '../../hooks/useFileUpload';
+import { CreateStoryScheme, Story } from '../../constants/Types';
 
 
 const GENRES = [
@@ -61,7 +61,7 @@ const CreateStoryModal: React.FC<CreateStoryModalProps> = ({
   return (
     <Modal>
       <div className="newStoryForm">
-        <div className="title">Create a new story!</div>
+        <div className="title">{story ? `Edit ${story.metadata.title}` : `Create a new story!`}</div>
         {errors.map(error => <p className="errorText" key={error}>{error}</p>)}
         <div className="metadata">
           <div className="coverPhotoData">
