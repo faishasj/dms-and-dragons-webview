@@ -20,7 +20,6 @@ export const newMessage = (): Message => ({
   image: undefined,
   text: '',
   imageFile: null,
-  personaId: undefined,
 });
 export const newOption = (stepId: Step['id']): Option => ({ // Option must point to a next step
   id: uuid(),
