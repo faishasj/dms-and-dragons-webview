@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 
-import MessageDisplay from '../Message';
+import MessageDisplay from '../MessageDisplay';
+import ReplyDisplay from '../ReplyDisplay';
 import { Step, Message } from '../StepsReducer';
 import './StepDisplay.css';
 
@@ -13,11 +14,11 @@ const StepDisplay: React.FC<StepDisplayProps> = ({ step, onNewMessage, onUpdateM
       {step.messages.map((message, i) => {
         return (
           <div key={`${JSON.stringify(message)} - ${i}`}>
-            <MessageDisplay isAuthor={false} message={message} onUpdate={updateMessage} />
+            <MessageDisplay message={message} onUpdate={updateMessage} />
           </div>
         );
       })}
-      {option && <MessageDisplay isAuthor messageText={option.requiredText} />}
+      {option && <ReplyDisplay option={option}/>}
     </div>
   );
 };

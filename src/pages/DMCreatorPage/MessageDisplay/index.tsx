@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 
+import ContentEditable from 'react-contenteditable';
+
 import { Message } from '../StepsReducer';
 import './Message.css';
 
 
 const MessageDisplay: React.FC<MessageDisplayProps> = ({
-  isAuthor, messageText, name, profilePicture,
-  message, onUpdate,
+  messageText, name, profilePicture,
+  message, onUpdate
 }) => {
   const [expanded, setExpanded] = useState(false);
 
@@ -16,26 +18,33 @@ const MessageDisplay: React.FC<MessageDisplayProps> = ({
   const [typeTime, setType] = useState(message ? message?.typingTime / 1000 : 0);
 
   return (
-    <div className={"Message" + (isAuthor ? " author": "")}>
-      {profilePicture && !isAuthor && <img className="authorPic" alt="Author" src={profilePicture}/>}
+    <div className={"Message"}>
+      {profilePicture && <img className="authorPic" alt="Author" src={profilePicture}/>}
       <div className="messageBody" onClick={() => {
-        setExpanded(!expanded);
-        if (expanded) onUpdate?.({ ...message, text, image, typingTime: typeTime, waitingTime: waitTime });
-        }}>
-        {name && !isAuthor && <div className="authorName">{name}</div>}
-        <input className="messageText" type="textarea" disabled={isAuthor} value={text} onChange={e => setText(e.target.value)} />
+          setExpanded(!expanded);
+          if (expanded) onUpdate?.({ ...message, text, image, typingTime: typeTime, waitingTime: waitTime });
+        }}
+      >
+        {name && <div className="authorName">{name}</div>}
+        
+        <ContentEditable
+          className="messageText" 
+          html={text!}
+          onChange={e => setText(e.target.value)}
+        />
       </div>
-      {(expanded && !isAuthor) && (
+
+      {expanded && (
         <div className="expandedContainer">
           <div className="row">
-            <p>Wait</p>
-            <input type="number" min={0.1} value={waitTime?.toString()} onChange={e => setWait(parseFloat(e.target.value) || 0)} />
-            <p>second{waitTime === 1 ? '' : 's'}</p>
+            <div>Wait </div>
+              <input type="number" min={0.1} value={waitTime?.toString()} onChange={e => setWait(parseFloat(e.target.value) || 0)} />
+            <div> second{typeTime === 1 ? '' : 's'}</div>
           </div>
           <div className="row">
-            <p>Typing</p>
+            <div>Type for </div>
             <input type="number" value={typeTime?.toString()} onChange={e => setType(parseFloat(e.target.value) || 0)} />
-            <p>second{typeTime === 1 ? '' : 's'}</p>
+            <div> second{typeTime === 1 ? '' : 's'}</div>
           </div>
         </div>
       )}
@@ -44,7 +53,6 @@ const MessageDisplay: React.FC<MessageDisplayProps> = ({
 };
 
 export interface MessageDisplayProps {
-  isAuthor: boolean,
   messageText?: string;
   name?: string,
   profilePicture?: string,

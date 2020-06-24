@@ -1,16 +1,20 @@
-import React, { useReducer, useCallback } from 'react';
+import React, { useState, useReducer, useCallback } from 'react';
+
+import { Story } from '../../constants/Types';
 
 import { saveStory } from '../../lib/Database';
 import Header from '../../components/Header';
 import StepDisplay from './StepDisplay';
-import CircleButton from '../../components/CircleButton';
 import Link from '../../components/Link';
 import { stepsReducer, newMessage, newStep, Message, Step, Option } from './StepsReducer';
+import CreateStoryModal from '../../components/CreateStoryModal';
 import './DMCreatorPage.css';
 
 
-const DMCreatorPage: React.FC<DMCreatorPageProps> = ({ storyID }) => {
+const DMCreatorPage: React.FC<DMCreatorPageProps> = ({ story }) => {
   const [steps, dispatch] = useReducer(stepsReducer, []);
+
+  const [editingMeta, setEditingMeta] = useState<Boolean>(false);
 
   const addStep = useCallback(() => {
     const root = steps.length <= 0;
@@ -65,7 +69,7 @@ const DMCreatorPage: React.FC<DMCreatorPageProps> = ({ storyID }) => {
   console.log(steps);
   return (
     <div className="DMCreatorPage">
-      <Header pageTitle="DM Creator"/>
+      <Header pageTitle="DM Creator" settingsCallback={() => setEditingMeta(true)}/>
       <div className="container">
         {steps.map((step, i) => (
           <StepDisplay
@@ -76,9 +80,16 @@ const DMCreatorPage: React.FC<DMCreatorPageProps> = ({ storyID }) => {
           />
         ))}
         <div className="row">
-          <CircleButton icon="➕" onClick={addMessage} />
-          <CircleButton icon="➕" onClick={addStep} />
+          <div className="rowOption" onClick={addMessage}>+ ADD MESSAGE</div>
+          <div className="rowOption" onClick={addStep}>+ ADD REPLY</div>
         </div>
+
+       { editingMeta && (
+        <CreateStoryModal 
+          onDismiss={() => setEditingMeta(false)} 
+          onEdit={() => {}} 
+          story={ story }/>
+      )}
       </div>
       <div className="toolbar"><Link label="Save" onClick={submit} /></div>
     </div>
@@ -86,7 +97,7 @@ const DMCreatorPage: React.FC<DMCreatorPageProps> = ({ storyID }) => {
 };
 
 export interface DMCreatorPageProps {
-  storyID?: string
+  story: Story
 }
 
 export default DMCreatorPage;
