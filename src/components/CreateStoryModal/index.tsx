@@ -43,20 +43,20 @@ const CreateStoryModal: React.FC<CreateStoryModalProps> = ({
   const [errors, setErrors] = useState<string[]>([]);
 
   const submit = useCallback(() => {
-    if (!!title && !!genre && !!description && !!imageFile) {
+    if (!!title && !!genre && !!description && (!!imageFile || story?.metadata.coverPhoto)) {
       setErrors([]);
       if (story && onEdit) onEdit({
         ...story,
         published,
         metadata: { ...story.metadata, title, description, genre },
-      }, imageFile);
-      else onSubmit?.({ title, description, genre, image: imageFile });
+      }, imageFile!);
+      else onSubmit?.({ title, description, genre, image: imageFile! });
     } else {
       setErrors([
         !title && 'Must include title',
         !description && 'Must include description',
         !genre && 'Must include genre',
-        !imageFile && 'Must include cover image',
+        (!imageFile && !story?.metadata.coverPhoto) && 'Must include cover image',
       ].filter(a => a) as string[]);
     }
   }, [title, genre, description, published, imageFile, story, onSubmit, onEdit]);
