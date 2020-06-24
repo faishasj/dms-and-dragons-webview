@@ -14,12 +14,12 @@ export const newMessage = (): Message => ({
   typingTime: 1000,
   waitingTime: 1000,
   image: undefined,
-  text: 'MESSAGE',
+  text: '',
   personaId: undefined,
 });
 export const newOption = (stepId: Step['id']): Option => ({ // Option must point to a next step
   id: uuid(),
-  requiredText: 'Yes',
+  requiredText: 'Any reply',
   stepId,
 });
 export const newStep = (root = false): Step => ({
