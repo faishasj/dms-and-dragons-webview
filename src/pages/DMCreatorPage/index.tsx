@@ -22,16 +22,18 @@ const DMCreatorPage: React.FC<DMCreatorPageProps> = () => {
   const { story: initStory } = state || { story: {} };
 
   const [story, setStory] = useState(initStory);
-  const [editingMeta, setEditingMeta] = useState<Boolean>(false);
+  const [editingMeta, setEditingMeta] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [loadingProgress, setLoadingProgress] = useState<number | null>(null);
 
   const { id: storyId } = story || {};
   useEffect(() => {
     if (storyId) 
+      setLoading(true);
       getStorySteps(storyId).then(traverseSteps).then(parseSteps).then(steps => dispatch({
         type: 'set',
         steps,
-      }));
+      })).then(() => setLoading(false));
   }, [storyId]);
 
 
@@ -106,7 +108,7 @@ const DMCreatorPage: React.FC<DMCreatorPageProps> = () => {
     <div className="DMCreatorPage">
       <Header pageTitle="DM Creator" settingsCallback={() => setEditingMeta(true)}/>
       <div className="container">
-        {loadingProgress !== null && <LoadingModal progress={loadingProgress} />}
+        {(loading || loadingProgress !== null) && <LoadingModal progress={loadingProgress || undefined} />}
         {!storyId && <Modal><p>No Story</p></Modal>}
 
         {steps.map((step, i) => (
