@@ -81,8 +81,8 @@ const DMCreatorPage: React.FC<DMCreatorPageProps> = () => {
   }, []);
 
   const deleteOption = useCallback((step: Step, optionId: Option['id']) => {
-    const numberOfOptions = step.messages.length;
-    if (numberOfOptions > 1) console.warn('Can\'t delete only option');
+    const numberOfOptions = step.options.length;
+    if (numberOfOptions <= 1) console.warn('Can\'t delete only option');
     else dispatch({
       type: 'update',
       step: { ...step, options: step.options.filter(op => op.id !== optionId) },
