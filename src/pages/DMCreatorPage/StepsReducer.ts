@@ -105,7 +105,11 @@ export function parseSteps(steps: DBStep[]): Step[] {
 export function convertSteps(steps: Step[]): DBStep[] {
   return steps.map(step => {
     const messages = step.messages.map(({ id, ...message }) => message);
-    const options = step.options.map(({ id, ...option }) => option);
+    const options = step.options.filter(option => step.options.length === 1 || option.requiredText !== '')
+      .map(({ id, ...option }, _, { length: newLength }) => ({
+      ...option,
+      requiredText: newLength === 1 ? '' : option.requiredText,
+    }));
     return { ...step, messages, options };
   });
 }
