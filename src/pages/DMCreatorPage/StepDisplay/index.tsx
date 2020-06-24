@@ -4,10 +4,12 @@ import MessageDisplay from '../MessageDisplay';
 import ReplyDisplay from '../ReplyDisplay';
 import { Step, Message, Option } from '../StepsReducer';
 import './StepDisplay.css';
+import { Persona } from '../../../constants/Types';
 
 
 const StepDisplay: React.FC<StepDisplayProps> = ({ 
-  step, onNewMessage, onUpdateMessage, onAddOption, onUpdateOption, onDeleteOption
+  step, personas,
+  onNewMessage, onUpdateMessage, onAddOption, onUpdateOption, onDeleteOption
 }) => {
 
   const [option, setOption] = useState<Option | null>(null); // TODO: Branching
@@ -20,11 +22,19 @@ const StepDisplay: React.FC<StepDisplayProps> = ({
 
   return (
     <div className="stepDisplay">
-      {step.messages.map(message => (
-        <div key={message.id}>
-          <MessageDisplay message={message} onUpdate={updateMessage} />
-        </div>
-      ))}
+      {step.messages.map(message => {
+        const persona = personas.find(p => p.id === message.personaId);
+        return (
+          <div key={message.id}>
+            <MessageDisplay
+              name={persona?.name}
+              profilePicture={persona?.profilePic}
+              message={message}
+              onUpdate={updateMessage}
+            />
+          </div>
+        );
+      })}
 
       {step.options.length > 0 && (
         <ReplyDisplay 
@@ -41,6 +51,7 @@ const StepDisplay: React.FC<StepDisplayProps> = ({
 
 export interface StepDisplayProps {
   step: Step;
+  personas: Persona[];
 
   onNewMessage: (step: Step, message: Partial<Message>) => void;
   onUpdateMessage: (step: Step, message: Partial<Message>) => void;

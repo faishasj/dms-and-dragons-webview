@@ -10,7 +10,7 @@ import './Message.css';
 
 const MessageDisplay: React.FC<MessageDisplayProps> = ({
   messageText, name, profilePicture,
-  message, onUpdate
+  message, onUpdate,
 }) => {
   const [expanded, setExpanded] = useState(false);
   const [fileErrors, setFileErrors] = useState<FileError[]>([]);
@@ -36,57 +36,59 @@ const MessageDisplay: React.FC<MessageDisplayProps> = ({
   return (
     <div className="Message">
       {profilePicture && <img className="authorPic" alt="Author" src={profilePicture}/>}
-      <div className="messageBody" onClick={() => setExpanded(!expanded)}>
-        {name && <div className="authorName">{name}</div>}
-        {image ? <img className="messageImage" alt="Message Content" src={image} /> : (
-          <ContentEditable
-            className="messageText" 
-            html={messageText || message?.text || ''}
-            onChange={e => update('text', e.target.value)}
-          />
-        )}
-      </div>
+      <div>
+        <div className="messageBody" onClick={() => setExpanded(!expanded)}>
+          {name && <div className="authorName">{name}</div>}
+          {image ? <img className="messageImage" alt="Message Content" src={image} /> : (
+            <ContentEditable
+              className="messageText" 
+              html={messageText || message?.text || ''}
+              onChange={e => update('text', e.target.value)}
+            />
+          )}
+        </div>
 
-      {expanded && (
-        <div className="expandedContainer">
-          <Link label="Add Image" onClick={open} />
-          {message?.imageFile && <Link label="Remove Image" onClick={removeImage} />}
-          <input {...getInputProps()} />
-          {fileErrors.map(error => <p className="errorText" key={error.code}>{error.message}</p>)}
-          <div className="row">
-            <div>Wait </div>
+        {expanded && (
+          <div className="expandedContainer">
+            <Link label="Add Image" onClick={open} />
+            {message?.imageFile && <Link label="Remove Image" onClick={removeImage} />}
+            <input {...getInputProps()} />
+            {fileErrors.map(error => <p className="errorText" key={error.code}>{error.message}</p>)}
+            <div className="row">
+              <div>Wait </div>
+                <input
+                  type="number"
+                  min={0.1}
+                  max={100}
+                  value={waitTime.toString()}
+                  onChange={e => updateTime('waitingTime', parseFloat(e.target.value))}
+                />
+              <div> second{typeTime === 1 ? '' : 's'}</div>
+            </div>
+            <div className="row">
+              <div>Type for </div>
               <input
                 type="number"
                 min={0.1}
                 max={100}
-                value={waitTime.toString()}
-                onChange={e => updateTime('waitingTime', parseFloat(e.target.value))}
+                value={typeTime.toString()}
+                onChange={e => updateTime('typingTime', parseFloat(e.target.value))}
               />
-            <div> second{typeTime === 1 ? '' : 's'}</div>
+              <div> second{typeTime === 1 ? '' : 's'}</div>
+            </div>
           </div>
-          <div className="row">
-            <div>Type for </div>
-            <input
-              type="number"
-              min={0.1}
-              max={100}
-              value={typeTime.toString()}
-              onChange={e => updateTime('typingTime', parseFloat(e.target.value))}
-            />
-            <div> second{typeTime === 1 ? '' : 's'}</div>
-          </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
 
 export interface MessageDisplayProps {
   messageText?: string;
-  name?: string,
-  profilePicture?: string,
+  name?: string;
+  profilePicture?: string;
 
-  message?: Message,
+  message?: Message;
   onUpdate?: (message: Partial<Message>) => void;
 }
 

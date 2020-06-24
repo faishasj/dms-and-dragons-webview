@@ -26,7 +26,7 @@ const DMCreatorPage: React.FC<DMCreatorPageProps> = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingProgress, setLoadingProgress] = useState<number | null>(null);
 
-  const { id: storyId } = story || {};
+  const { id: storyId, personas } = story || {};
   useEffect(() => {
     if (storyId) 
       setLoading(true);
@@ -126,6 +126,7 @@ const DMCreatorPage: React.FC<DMCreatorPageProps> = () => {
           <StepDisplay
             key={step.id}
             step={step}
+            personas={personas}
             onNewMessage={addMessage}
             onUpdateMessage={updateMessage}
             onAddOption={addOption}
