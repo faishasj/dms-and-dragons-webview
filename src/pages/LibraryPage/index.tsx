@@ -62,16 +62,12 @@ const LibraryPage: React.FC<RouteComponentProps> = () => {
           <FontAwesomeIcon className="searchIcon" icon={ faSearch }/>
         </div>
         <div className="storyList">
-        {readerID && stories.map(({id, authorName, metadata: { title, description, genre, coverPhoto }}, key) => (
+        {readerID && stories.map((story, key) => (
             <StoryCard 
-              key={ key }
+              key={ story.id }
+              story={ story }
               isLibrary={ true }
-              title={ title } 
-              authorName={ authorName }
-              description={ description } 
-              genre={ genre } 
-              coverPhoto={ coverPhoto }
-              readCallback={ () => readStory(id) }
+              readCallback={ () => readStory(story.id) }
             />
           ))}
         </div>

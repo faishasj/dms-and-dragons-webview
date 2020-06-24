@@ -1,13 +1,15 @@
 import React, { FC } from 'react';
 
+import { Story } from '../../constants/Types';
+
 import Link from '../Link';
 import './StoryCard.css';
 
 
-const StoryCard: FC<StoryCardProps> 
-  = ({ isLibrary, title, description, genre, coverPhoto, authorName, published, 
-    readCallback, editCallback, deleteCallback }) => {
-
+const StoryCard: FC<StoryCardProps> = ({ 
+  story: {authorName, published, metadata: {title, description, genre, coverPhoto}}, 
+  isLibrary, readCallback, editCallback, deleteCallback 
+}) => {
   return (
     <div className="StoryCard">
       <div className="card"/>
@@ -43,13 +45,8 @@ const StoryCard: FC<StoryCardProps>
 }
 
 export interface StoryCardProps {
+  story: Story,
   isLibrary: boolean,
-  title: string,
-  description: string,
-  genre: string,
-  coverPhoto: string,
-  authorName?: string,
-  published?: boolean,
   readCallback?: () => void,
   editCallback?: () => void,
   deleteCallback?: () => void

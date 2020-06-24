@@ -11,7 +11,7 @@ import Header from '../../components/Header';
 import StoryCard from '../../components/StoryCard';
 import CircleButton from '../../components/CircleButton';
 import DialogModal from '../../components/DialogModal';
-import CreateStoryModal from './CreateStoryModal';
+import CreateStoryModal from '../../components/CreateStoryModal';
 import './MyStoriesPage.css';
 import LoadingModal from '../../components/LoadingModal';
 
@@ -28,8 +28,8 @@ const MyStoriesPage: FC<RouteComponentProps> = ({ history }) => {
     setStories(myStories);
   }, [authorID])
 
-  const editStory = useCallback(storyID => {
-    history.push(ROUTES.DM_CREATOR, { storyID });
+  const editStory = useCallback(story => {
+    history.push(ROUTES.DM_CREATOR, { ...story });
   }, [history])
 
   const deleteMyStory = useCallback(async (story: Story) => {
@@ -59,14 +59,10 @@ const MyStoriesPage: FC<RouteComponentProps> = ({ history }) => {
           <div className="storyList">
             {stories.map((story, key) => (
               <StoryCard 
-                key={ key }
+                key={ story.id }
+                story = { story }
                 isLibrary={ false }
-                title={ story.metadata.title } 
-                description={ story.metadata.description }
-                genre={ story.metadata.genre } 
-                coverPhoto={ story.metadata.coverPhoto }
-                published={ story.published }
-                editCallback={ () => editStory(story.id) }
+                editCallback={ () => editStory(story) }
                 deleteCallback={ () => setDeletingStory(story) }
               />
             ))}
