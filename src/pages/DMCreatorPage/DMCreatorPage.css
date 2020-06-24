@@ -6,11 +6,11 @@
 
 .DMCreatorPage .container {
   display: flex;
-  flex: 1;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   padding: 1rem;
+  flex: 1;
 }
 
 .DMCreatorPage .messengerView {
@@ -21,11 +21,11 @@
 
 .DMCreatorPage .toolbar {
   z-index: 1;
-  box-shadow: -5px -1px 18px rgba(0, 0, 0, 0.2);
-  padding: 2rem;
   display: flex;
   justify-content: center;
   align-items: center;
+  box-shadow: -5px -1px 18px rgba(0, 0, 0, 0.2);
+  padding: 2rem;
 }
 
 .DMCreatorPage .CircleButton {
@@ -35,10 +35,18 @@
 }
 
 .DMCreatorPage .row {
-  width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   margin: 1rem 0;
+  width: 100%;
+}
+
+.DMCreatorPage .rowOption {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: rgba(0, 0, 0, .40);
+  cursor: pointer;
+  user-select: none;
 }
