@@ -21,8 +21,6 @@
 
 .DMCreatorPage .toolbar {
   z-index: 1;
-  position: sticky;
-  bottom: 0;
   display: flex;
   justify-content: center;
   align-items: center;
