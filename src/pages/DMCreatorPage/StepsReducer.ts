@@ -19,7 +19,7 @@ export const newMessage = (): Message => ({
 });
 export const newOption = (stepId: Step['id']): Option => ({ // Option must point to a next step
   id: uuid(),
-  requiredText: 'Any reply',
+  requiredText: '',
   stepId,
 });
 export const newStep = (root = false): Step => ({

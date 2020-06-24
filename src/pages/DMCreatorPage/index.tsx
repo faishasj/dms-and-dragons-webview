@@ -10,7 +10,7 @@ import Link from '../../components/Link';
 import LoadingModal from '../../components/LoadingModal';
 import CreateStoryModal from '../../components/CreateStoryModal';
 import StepDisplay from './StepDisplay';
-import { stepsReducer, newMessage, newStep, Message, Step, Option, convertSteps, parseSteps, traverseSteps } from './StepsReducer';
+import { stepsReducer, newMessage, newStep, Message, Step, Option, newOption, convertSteps, parseSteps, traverseSteps } from './StepsReducer';
 import './DMCreatorPage.css';
 
 
@@ -56,19 +56,33 @@ const DMCreatorPage: React.FC<DMCreatorPageProps> = () => {
     });
   }, []);
 
+  const updateMessage = useCallback((step: Step, message: Partial<Message>) => {
+    dispatch({
+      type: 'update',
+      step: { ...step, messages: step.messages.map(mess => mess.id === message.id ? { ...mess, ...message } : mess) },
+    });
+  }, []);
+
+  const addOption = useCallback((step: Step) => {
+    dispatch({
+      type: 'update',
+      step: { ...step, options: [...step.options, newOption(step.id)]}
+    })
+  }, []);
+
+  const updateOption = useCallback((step: Step, option: Partial<Option>) => {
+    dispatch({
+      type: 'update',
+      step: { ...step, options: step.options.map(opt => opt.id === option.id ? {...opt, ...option} : opt)},
+    })
+  }, []);
+
   const deleteOption = useCallback((step: Step, optionId: Option['id']) => {
     const numberOfOptions = step.messages.length;
     if (numberOfOptions > 1) console.warn('Can\'t delete only option');
     else dispatch({
       type: 'update',
       step: { ...step, options: step.options.filter(op => op.id !== optionId) },
-    });
-  }, []);
-
-  const updateMessage = useCallback((step: Step, message: Partial<Message>) => {
-    dispatch({
-      type: 'update',
-      step: { ...step, messages: step.messages.map(mess => mess.id === message.id ? { ...mess, ...message } : mess) },
     });
   }, []);
 
@@ -97,6 +111,9 @@ const DMCreatorPage: React.FC<DMCreatorPageProps> = () => {
             step={step}
             onNewMessage={addMessage}
             onUpdateMessage={updateMessage}
+            onAddOption={addOption}
+            onUpdateOption={updateOption}
+            onDeleteOption={deleteOption}
           />
         ))}
 
