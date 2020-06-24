@@ -29,7 +29,7 @@ const MyStoriesPage: FC<RouteComponentProps> = ({ history }) => {
   }, [authorID])
 
   const editStory = useCallback(story => {
-    history.push(ROUTES.DM_CREATOR, { ...story });
+    history.push(ROUTES.DM_CREATOR, { story });
   }, [history])
 
   const deleteMyStory = useCallback(async (story: Story) => {
@@ -42,7 +42,7 @@ const MyStoriesPage: FC<RouteComponentProps> = ({ history }) => {
     setCreatingStory(false);
     const story = await newStory(authorID, data, (progress) => setLoadingProgress(progress));
     setLoadingProgress(null);
-    history.push(ROUTES.DM_CREATOR, { storyID: story.id });
+    history.push(ROUTES.DM_CREATOR, { story });
   }, [authorID, setLoadingProgress, history])
 
   useEffect(() => {

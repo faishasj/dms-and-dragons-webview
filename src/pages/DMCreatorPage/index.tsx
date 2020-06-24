@@ -1,4 +1,5 @@
 import React, { useState, useReducer, useCallback } from 'react';
+import { useLocation } from 'react-router-dom';
 
 import { Story } from '../../constants/Types';
 
@@ -11,10 +12,12 @@ import CreateStoryModal from '../../components/CreateStoryModal';
 import './DMCreatorPage.css';
 
 
-const DMCreatorPage: React.FC<DMCreatorPageProps> = ({ story }) => {
+const DMCreatorPage: React.FC<DMCreatorPageProps> = () => {
   const [steps, dispatch] = useReducer(stepsReducer, []);
 
   const [editingMeta, setEditingMeta] = useState<Boolean>(false);
+
+  const { state: { story } } = useLocation<DMCreatorPageLocData>();
 
   const addStep = useCallback(() => {
     const root = steps.length <= 0;
@@ -96,8 +99,7 @@ const DMCreatorPage: React.FC<DMCreatorPageProps> = ({ story }) => {
   );
 };
 
-export interface DMCreatorPageProps {
-  story: Story
-}
+export interface DMCreatorPageLocData { story: Story }
+export interface DMCreatorPageProps {}
 
 export default DMCreatorPage;
