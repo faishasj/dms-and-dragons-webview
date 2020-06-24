@@ -10,9 +10,9 @@ import Link from '../../components/Link';
 import LoadingModal from '../../components/LoadingModal';
 import CreateStoryModal from '../../components/CreateStoryModal';
 import StepDisplay from './StepDisplay';
+import Modal from '../../components/Modal';
 import { stepsReducer, newMessage, newStep, Message, Step, Option, newOption, convertSteps, parseSteps, traverseSteps } from './StepsReducer';
 import './DMCreatorPage.css';
-import Modal from '../../components/Modal';
 
 
 const DMCreatorPage: React.FC<DMCreatorPageProps> = () => {
@@ -103,7 +103,7 @@ const DMCreatorPage: React.FC<DMCreatorPageProps> = () => {
     }
     const data = convertSteps(newSteps);
     await saveStoryWithSteps(story, data);
-    dispatch({ type: 'set', steps: newSteps });
+    dispatch({ type: 'set', steps: parseSteps(data) }); // Parsing again to reset fields
     setLoading(false);
   }, [steps, story, storyId]);
 
