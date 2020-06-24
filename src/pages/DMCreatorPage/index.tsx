@@ -1,7 +1,7 @@
 import React, { useState, useReducer, useCallback, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { Story } from '../../constants/Types';
+import { Story, Persona } from '../../constants/Types';
 import { PreviewFile } from '../../hooks/useFileUpload';
 import { saveStory, saveStoryWithSteps, getStorySteps, uploadMessageFiles } from '../../lib/Database';
 
@@ -9,8 +9,9 @@ import Header from '../../components/Header';
 import Link from '../../components/Link';
 import LoadingModal from '../../components/LoadingModal';
 import CreateStoryModal from '../../components/CreateStoryModal';
-import StepDisplay from './StepDisplay';
 import Modal from '../../components/Modal';
+import PersonaDisplay from '../../components/PersonaDisplay';
+import StepDisplay from './StepDisplay';
 import { stepsReducer, newMessage, newStep, Message, Step, Option, newOption, convertSteps, parseSteps, traverseSteps } from './StepsReducer';
 import './DMCreatorPage.css';
 
@@ -23,6 +24,7 @@ const DMCreatorPage: React.FC<DMCreatorPageProps> = () => {
 
   const [story, setStory] = useState(initStory);
   const [editingMeta, setEditingMeta] = useState<boolean>(false);
+  const [messageAddingPersona, setMessageAddingPersona] = useState<Message | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingProgress, setLoadingProgress] = useState<number | null>(null);
 
@@ -113,6 +115,19 @@ const DMCreatorPage: React.FC<DMCreatorPageProps> = () => {
     setLoadingProgress(null);
   }, [setLoadingProgress]);
 
+  const setPersona = ({ id: personaId }: Persona) => {
+    const step = steps.find(s => s.messages.map(m => m.id).includes(messageAddingPersona?.id || ''));
+    if (!step) return console.warn('Couldn\'t find step where persona adding message lives');
+    dispatch({
+      type: 'update',
+      step: {
+        ...step,
+        messages: step.messages.map(mess => mess.id === messageAddingPersona?.id ? { ...mess, personaId } : mess)
+      }
+    });
+    setMessageAddingPersona(null);
+  };
+
 
   return (
     <div className="DMCreatorPage">
@@ -131,6 +146,7 @@ const DMCreatorPage: React.FC<DMCreatorPageProps> = () => {
             onAddOption={addOption}
             onUpdateOption={updateOption}
             onDeleteOption={deleteOption}
+            onAddPersona={setMessageAddingPersona}
           />
         ))}
 
@@ -144,6 +160,13 @@ const DMCreatorPage: React.FC<DMCreatorPageProps> = () => {
           onDismiss={() => setEditingMeta(false)} 
           onEdit={editStory} 
           story={ story }/>
+      )}
+      {!!messageAddingPersona && (
+        <Modal>
+          <h3>Choose Persona</h3>
+          {personas.map(persona => <PersonaDisplay key={persona.id} persona={persona} onClick={() => setPersona(persona)} />)}
+          <Link label="Close" onClick={() => setMessageAddingPersona(null)} />
+        </Modal>
       )}
       </div>
       <div className="toolbar"><Link label="Save" onClick={submit} /></div>

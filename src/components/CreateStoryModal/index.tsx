@@ -40,6 +40,9 @@ const CreateStoryModal: React.FC<CreateStoryModalProps> = ({
   const [fileErrors, setFileErrors] = useState<FileError[]>([]);
   const [errors, setErrors] = useState<string[]>([]);
 
+  const [personaName, setPersonaName] = useState('');
+  const [personaFile, setPersonaFile] = useState<PreviewFile | null>(null);
+
   const submit = useCallback(() => {
     if (!!title && !!genre && !!description && !!imageFile) {
       setErrors([]);
@@ -109,6 +112,7 @@ const CreateStoryModal: React.FC<CreateStoryModalProps> = ({
         <div>
           <div><label htmlFor="personas">PERSONAS</label></div>
           {story?.personas.map(persona => <PersonaDisplay key={persona.id} persona={persona} />)}
+          <Link label="NEW PERSONA" onClick={() => console.log('NEW')} />
         </div>
 
         <div className="buttons">

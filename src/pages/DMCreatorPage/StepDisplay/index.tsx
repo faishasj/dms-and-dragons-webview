@@ -9,7 +9,7 @@ import { Persona } from '../../../constants/Types';
 
 const StepDisplay: React.FC<StepDisplayProps> = ({ 
   step, personas,
-  onNewMessage, onUpdateMessage, onAddOption, onUpdateOption, onDeleteOption
+  onNewMessage, onUpdateMessage, onAddOption, onUpdateOption, onDeleteOption, onAddPersona,
 }) => {
 
   const [option, setOption] = useState<Option | null>(null); // TODO: Branching
@@ -31,6 +31,7 @@ const StepDisplay: React.FC<StepDisplayProps> = ({
               profilePicture={persona?.profilePic}
               message={message}
               onUpdate={updateMessage}
+              onAddPersona={() => onAddPersona(message)}
             />
           </div>
         );
@@ -59,5 +60,7 @@ export interface StepDisplayProps {
   onAddOption: (step: Step) => void;
   onUpdateOption: (step: Step, option: Partial<Option>) => void;
   onDeleteOption: (step: Step, optionId: Option['id']) => void;
+
+  onAddPersona: (message: Message) => void;
 }
 export default StepDisplay;
