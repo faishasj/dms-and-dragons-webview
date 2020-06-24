@@ -8,6 +8,7 @@ import Modal from '../Modal';
 import Link from '../Link';
 import useFileUpload, { PreviewFile, FileError } from '../../hooks/useFileUpload';
 import { CreateStoryScheme, Story } from '../../constants/Types';
+import './CreateStoryModal.css';
 
 
 const GENRES = [
