@@ -11,7 +11,7 @@ import './Message.css';
 
 const MessageDisplay: React.FC<MessageDisplayProps> = ({
   messageText, name, profilePicture,
-  message, onUpdate, onAddPersona,
+  message, onUpdate, onEditPersona,
 }) => {
   const [expanded, setExpanded] = useState(false);
   const [fileErrors, setFileErrors] = useState<FileError[]>([]);
@@ -53,7 +53,7 @@ const MessageDisplay: React.FC<MessageDisplayProps> = ({
           <div className="expandedContainer">
             <Link label="Add Image" onClick={open} />
             {message?.imageFile && <Link label="Remove Image" onClick={removeImage} />}
-            {(!!onAddPersona && !message?.personaId) && <Link label="Add Persona" onClick={onAddPersona} />}
+            {onEditPersona && <Link label={`${ message?.personaId ? 'Edit' : 'Add'} Persona`} onClick={onEditPersona} />}
             <input {...getInputProps()} />
             {fileErrors.map(error => <p className="errorText" key={error.code}>{error.message}</p>)}
             <div className="row">
@@ -92,7 +92,7 @@ export interface MessageDisplayProps {
 
   message?: Message;
   onUpdate?: (message: Partial<Message>) => void;
-  onAddPersona?: () => void;
+  onEditPersona?: () => void;
 }
 
 export default MessageDisplay;

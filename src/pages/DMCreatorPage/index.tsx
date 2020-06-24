@@ -113,7 +113,8 @@ const DMCreatorPage: React.FC<DMCreatorPageProps> = () => {
     setLoadingProgress(null);
   }, [setLoadingProgress]);
 
-  const setPersona = ({ id: personaId }: Persona) => {
+  const setPersona = (persona?: Persona) => {
+    const { id: personaId } = persona || { id: '' };
     const step = steps.find(s => s.messages.map(m => m.id).includes(messageAddingPersona?.id || ''));
     if (!step) return console.warn('Couldn\'t find step where persona adding message lives');
     dispatch({
@@ -144,7 +145,7 @@ const DMCreatorPage: React.FC<DMCreatorPageProps> = () => {
             onAddOption={addOption}
             onUpdateOption={updateOption}
             onDeleteOption={deleteOption}
-            onAddPersona={setMessageAddingPersona}
+            onEditPersona={setMessageAddingPersona}
           />
         ))}
 
@@ -163,7 +164,10 @@ const DMCreatorPage: React.FC<DMCreatorPageProps> = () => {
         <Modal>
           <h3>Choose Persona</h3>
           {personas.map(persona => <PersonaDisplay key={persona.id} persona={persona} onClick={() => setPersona(persona)} />)}
-          <Link label="Close" onClick={() => setMessageAddingPersona(null)} />
+          <div className="row">
+            <Link label="Close" onClick={() => setMessageAddingPersona(null)} />
+            <Link className="cancelButton" label="Remove" onClick={() => setPersona()} />
+          </div>
         </Modal>
       )}
       </div>
