@@ -10,7 +10,7 @@ const StepDisplay: React.FC<StepDisplayProps> = ({
   step, onNewMessage, onUpdateMessage, onAddOption, onUpdateOption, onDeleteOption
 }) => {
 
-  const [option, setOption] = useState(null);// TODO: Branching
+  const [option, setOption] = useState<Option | null>(null); // TODO: Branching
 
   const updateMessage = useCallback(data => onUpdateMessage(step, data), [step, onUpdateMessage]);
 
@@ -32,7 +32,7 @@ const StepDisplay: React.FC<StepDisplayProps> = ({
           onAddOption={addOption}
           onUpdateOption={updateOption}
           onDeleteOption={deleteOption}
-          onSelectOption={opt => console.log(opt)}
+          onSelectOption={opt => setOption(opt)}
         />
       )}
     </div>
