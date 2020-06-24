@@ -11,13 +11,11 @@ const StepDisplay: React.FC<StepDisplayProps> = ({ step, onNewMessage, onUpdateM
   const updateMessage = useCallback(data => onUpdateMessage(step, data), [step, onUpdateMessage]);
   return (
     <div className="stepDisplay">
-      {step.messages.map((message, i) => {
-        return (
-          <div key={`${JSON.stringify(message)} - ${i}`}>
-            <MessageDisplay message={message} onUpdate={updateMessage} />
-          </div>
-        );
-      })}
+      {step.messages.map((message, i) => (
+        <div key={message.id}>
+          <MessageDisplay message={message} onUpdate={updateMessage} />
+        </div>
+      ))}
       {option && <ReplyDisplay option={option}/>}
     </div>
   );

@@ -73,7 +73,7 @@ const DMCreatorPage: React.FC<DMCreatorPageProps> = ({ story }) => {
       <div className="container">
         {steps.map((step, i) => (
           <StepDisplay
-            key={`${JSON.stringify(step)} - ${i}`}
+            key={step.id}
             step={step}
             onNewMessage={addMessage}
             onUpdateMessage={updateMessage}
