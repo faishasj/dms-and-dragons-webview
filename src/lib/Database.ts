@@ -112,7 +112,7 @@ export async function uploadMessageFiles(
 export async function saveStoryWithSteps(story: Story, steps: Step[]) {
   if (story.authorName) delete story.authorName;
   story.dateUpdated = firestore.Timestamp.now();
-  return console.log('SAVE: ', story, steps);
+
   const storyRef = collection(Collection.Stories).doc(story.id);
 
   // TODO: Transaction approach
