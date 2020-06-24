@@ -39,7 +39,6 @@ const DMCreatorPage: React.FC<DMCreatorPageProps> = () => {
 
   const addStep = useCallback(() => {
     const root = steps.length <= 0;
-
     dispatch({ type: 'add', step: newStep(root) });
   }, [steps]);
 

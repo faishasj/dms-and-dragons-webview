@@ -50,3 +50,17 @@
   cursor: pointer;
   user-select: none;
 }
+
+.DMCreatorPage .personaButton {
+  position: absolute;
+  height: 2rem;
+  width: 2rem;
+  right: 1rem;
+}
+
+.DMCreatorPage .personaImage {
+  height: 2rem;
+  width: 2rem;
+  border-radius: 18px;
+  margin-right: 8px;
+}

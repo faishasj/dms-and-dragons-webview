@@ -9,6 +9,7 @@ import Link from '../Link';
 import useFileUpload, { PreviewFile, FileError } from '../../hooks/useFileUpload';
 import { CreateStoryScheme, Story } from '../../constants/Types';
 import './CreateStoryModal.css';
+import PersonaDisplay from '../PersonaDisplay';
 
 
 const GENRES = [
@@ -103,6 +104,11 @@ const CreateStoryModal: React.FC<CreateStoryModalProps> = ({
             value={description}
             onChange={e => setDescription(e.target.value)}
           />
+        </div>
+
+        <div>
+          <div><label htmlFor="personas">PERSONAS</label></div>
+          {story?.personas.map(persona => <PersonaDisplay key={persona.id} persona={persona} />)}
         </div>
 
         <div className="buttons">
