@@ -98,12 +98,10 @@ const DMCreatorPage: React.FC<DMCreatorPageProps> = () => {
       .map(step => step.messages.map(({ id, imageFile, image }) => ({ stepId: step.id, id, newImage: imageFile, oldUrl: image })))
       .reduce((a, b) => [...a, ...b], [])
       .filter(a => a.newImage); // Only interested if there is a new image
-    if (imageChanges.length > 0) {
-      setLoading(true);
-      newSteps = await uploadMessageFiles(storyId, steps, imageChanges as any);
-    }
+    setLoading(true);
+    if (imageChanges.length > 0) newSteps = await uploadMessageFiles(storyId, steps, imageChanges as any);
     const data = convertSteps(newSteps);
-    await saveStoryWithSteps(story, data);
+    await Promise.all([saveStoryWithSteps(story, data), new Promise(resolve => setTimeout(resolve, 1000))]); // At least a second waiting
     dispatch({ type: 'set', steps: parseSteps(data) }); // Parsing again to reset fields
     setLoading(false);
   }, [steps, story, storyId]);
