@@ -63,7 +63,7 @@ const MessageDisplay: React.FC<MessageDisplayProps> = ({
                   value={waitTime.toString()}
                   onChange={e => updateTime('waitingTime', parseFloat(e.target.value))}
                 />
-              <div> second{typeTime === 1 ? '' : 's'}</div>
+              <div> second{waitTime === 1 ? '' : 's'}</div>
             </div>
             <div className="row">
               <div>Type for </div>
