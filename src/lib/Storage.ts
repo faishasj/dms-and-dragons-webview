@@ -18,7 +18,6 @@ export const uploadFile = async (
 
   uploadTask.on(Firebase.storage.TaskEvent.STATE_CHANGED, ({ bytesTransferred, totalBytes }) => {
     const progress = (bytesTransferred / totalBytes) * 100;
-    console.log(progress);
     if (onProgress) onProgress(progress, bytesTransferred, totalBytes);
   });
 

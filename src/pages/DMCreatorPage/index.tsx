@@ -2,22 +2,27 @@ import React, { useState, useReducer, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { Story } from '../../constants/Types';
+import { PreviewFile } from '../../hooks/useFileUpload';
+import { saveStory, saveStoryWithSteps } from '../../lib/Database';
 
-import { saveStory } from '../../lib/Database';
 import Header from '../../components/Header';
-import StepDisplay from './StepDisplay';
 import Link from '../../components/Link';
-import { stepsReducer, newMessage, newStep, Message, Step, Option } from './StepsReducer';
+import LoadingModal from '../../components/LoadingModal';
 import CreateStoryModal from '../../components/CreateStoryModal';
+import StepDisplay from './StepDisplay';
+import { stepsReducer, newMessage, newStep, Message, Step, Option } from './StepsReducer';
 import './DMCreatorPage.css';
 
 
 const DMCreatorPage: React.FC<DMCreatorPageProps> = () => {
   const [steps, dispatch] = useReducer(stepsReducer, []);
 
-  const [editingMeta, setEditingMeta] = useState<Boolean>(false);
+  const { state: { story: initStory } } = useLocation<DMCreatorPageLocData>();
 
-  const { state: { story } } = useLocation<DMCreatorPageLocData>();
+  const [story, setStory] = useState(initStory);
+  const [editingMeta, setEditingMeta] = useState<Boolean>(false);
+  const [loadingProgress, setLoadingProgress] = useState<number | null>(null);
+
 
   const addStep = useCallback(() => {
     const root = steps.length <= 0;
@@ -65,15 +70,23 @@ const DMCreatorPage: React.FC<DMCreatorPageProps> = () => {
       const options = step.options.map(({ id, ...option }) => option);
       return { ...step, messages, options };
     });
-    console.log('SAVE: ', data);
-    // saveStory(story, data);
-  }, [steps]);
+    saveStoryWithSteps(story, data);
+  }, [steps, story]);
 
-  console.log(steps);
+  const editStory = useCallback(async (story: Story, newImage?: PreviewFile) => {
+    setEditingMeta(false);
+    const newStory = await saveStory(story, newImage, (progress) => setLoadingProgress(progress));
+    setStory(newStory);
+    setLoadingProgress(null);
+  }, [setLoadingProgress]);
+
+
   return (
     <div className="DMCreatorPage">
       <Header pageTitle="DM Creator" settingsCallback={() => setEditingMeta(true)}/>
       <div className="container">
+        {loadingProgress !== null && <LoadingModal progress={loadingProgress} />}
+
         {steps.map((step, i) => (
           <StepDisplay
             key={step.id}
@@ -82,15 +95,16 @@ const DMCreatorPage: React.FC<DMCreatorPageProps> = () => {
             onUpdateMessage={updateMessage}
           />
         ))}
+
         <div className="row">
           <div className="rowOption" onClick={addMessage}>+ ADD MESSAGE</div>
           <div className="rowOption" onClick={addStep}>+ ADD REPLY</div>
         </div>
 
-       { editingMeta && (
+       {editingMeta && (
         <CreateStoryModal 
           onDismiss={() => setEditingMeta(false)} 
-          onEdit={() => {}} 
+          onEdit={editStory} 
           story={ story }/>
       )}
       </div>

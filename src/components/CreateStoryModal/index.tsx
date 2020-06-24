@@ -46,7 +46,7 @@ const CreateStoryModal: React.FC<CreateStoryModalProps> = ({
         ...story,
         metadata: { ...story.metadata, title, description, genre },
       }, imageFile);
-      else if (onSubmit) onSubmit({ title, description, genre, image: imageFile });
+      else onSubmit?.({ title, description, genre, image: imageFile });
     } else {
       setErrors([
         !title && 'Must include title',
@@ -69,7 +69,7 @@ const CreateStoryModal: React.FC<CreateStoryModalProps> = ({
             <div {...getRootProps()} className="coverPhotoContainer">
               <input {...getInputProps()} />
               {(imageFile || existingImage)
-                ? <img className="coverPhoto" alt="Story Cover" src={existingImage || imageFile?.preview} />
+                ? <img className="coverPhoto" alt="Story Cover" src={imageFile ? imageFile.preview : existingImage} />
                 : <FontAwesomeIcon icon={ faCamera }/>}
               {fileErrors.map(({ code, message }) => <p className="errorText" key={code}>{message}</p>)}
             </div>
@@ -82,11 +82,12 @@ const CreateStoryModal: React.FC<CreateStoryModalProps> = ({
               type="text"
               maxLength={20} 
               placeholder="Enter title..."
+              value={title}
               onChange={e => setTitle(e.target.value)}
-            ></input>
+            />
 
             <div><label htmlFor="genre">GENRE</label></div>
-            <select id="genre" name="genre" onChange={e => setGenre(e.target.value)}>
+            <select id="genre" name="genre" value={genre} onChange={e => setGenre(e.target.value)}>
               {GENRES.map(genreOption => <option key={genreOption} value={genreOption}>{genreOption}</option>)}
             </select>
           </div>
@@ -99,13 +100,14 @@ const CreateStoryModal: React.FC<CreateStoryModalProps> = ({
             maxLength={120}
             name="description"
             placeholder="Enter description..."
+            value={description}
             onChange={e => setDescription(e.target.value)}
           />
         </div>
 
         <div className="buttons">
           <Link label="CANCEL" className="cancel" onClick={onDismiss}/>
-          <Link label="NEXT" onClick={submit} />
+          <Link label={story ? 'SAVE' : 'NEXT'} onClick={submit} />
         </div>
       </div>
     </Modal>
