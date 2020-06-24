@@ -145,17 +145,10 @@ export async function deleteStory({ id, metadata: { coverPhoto } }: Story): Prom
 
 
 export const createPersona = async ({ id: storyId, ...story }: Story, name: string, imageFile: PreviewFile): Promise<Persona> => {
-  const token = process.env.REACT_APP_PAGE_ACCESS_TOKEN;
-
   const profilePic = await uploadFile(imageFile);
   URL.revokeObjectURL(imageFile.preview);
 
-  const { data: { id } } = await Axios.post<{ id: string }>('https://graph.facebook.com/me/personas', {
-    name,
-    profile_picture_url: profilePic,
-  }, { params: { access_token: token } });
-
-  const persona: Persona = { id, name, profilePic };
+  const { data: persona } = await Axios.post<Persona>(process.env.REACT_APP_WEBHOOK + '/webview/createPersona', { name, profilePic });
 
   collection(Collection.Stories).doc(storyId).set({
     ...story,
