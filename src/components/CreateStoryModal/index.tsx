@@ -35,6 +35,7 @@ const CreateStoryModal: React.FC<CreateStoryModalProps> = ({
   const [title, setTitle] = useState(story?.metadata.title || '');
   const [genre, setGenre] = useState(story?.metadata.genre || GENRES[0]);
   const [description, setDescription] = useState(story?.metadata.description || '');
+  const [published, setPublished] = useState(story?.published || false);
   const [imageFile, setImageFile] = useState<PreviewFile | null>(null);
   const [existingImage] = useState(story?.metadata.coverPhoto);
 
@@ -46,6 +47,7 @@ const CreateStoryModal: React.FC<CreateStoryModalProps> = ({
       setErrors([]);
       if (story && onEdit) onEdit({
         ...story,
+        published,
         metadata: { ...story.metadata, title, description, genre },
       }, imageFile);
       else onSubmit?.({ title, description, genre, image: imageFile });
@@ -57,7 +59,7 @@ const CreateStoryModal: React.FC<CreateStoryModalProps> = ({
         !imageFile && 'Must include cover image',
       ].filter(a => a) as string[]);
     }
-  }, [title, genre, description, imageFile, story, onSubmit, onEdit]);
+  }, [title, genre, description, published, imageFile, story, onSubmit, onEdit]);
 
   const { getRootProps, getInputProps } = useFileUpload(setImageFile, setFileErrors);
 
@@ -92,6 +94,18 @@ const CreateStoryModal: React.FC<CreateStoryModalProps> = ({
             <select id="genre" name="genre" value={genre} onChange={e => setGenre(e.target.value)}>
               {GENRES.map(genreOption => <option key={genreOption} value={genreOption}>{genreOption}</option>)}
             </select>
+
+            {onEdit && (
+              <div className="published">
+                <div><label htmlFor="genre">PUBLISHED:</label></div>
+                <input
+                  className="checkbox"
+                  type="checkbox"
+                  checked={published}
+                  onChange={() => setPublished(!published)}
+                />
+              </div>
+            )}
           </div>
         </div>
 
