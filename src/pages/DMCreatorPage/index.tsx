@@ -128,6 +128,7 @@ const DMCreatorPage: React.FC<DMCreatorPageProps> = () => {
   }, [messageAddingPersona, steps]);
 
   const newPersona = useCallback(async (name: string, imageFile: PreviewFile) => {
+    setEditingMeta(false);
     setLoading(true);
     const persona = await createPersona(story, name, imageFile);
     setStory({ ...story, personas: [...story.personas, persona] });
