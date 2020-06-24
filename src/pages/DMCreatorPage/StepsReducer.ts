@@ -30,11 +30,13 @@ export const newStep = (root = false): Step => ({
 });
 
 export type StepAction =
+  | { type: 'set'; steps: Step[] }
   | { type: 'add'; step: Step }
   | { type: 'delete'; step: Step }
   | { type: 'update'; step: Partial<Step> };
 export function stepsReducer(state: Step[], action: StepAction) {
   switch (action.type) {
+    case 'set': return action.steps;
     case 'add': {
       let newSteps = state.slice();
       if (newSteps.length > 0) { // Link previous step to this step
@@ -71,3 +73,40 @@ export function stepsReducer(state: Step[], action: StepAction) {
     default: return state;
   }
 }
+
+
+/** Order steps from the root */
+export function traverseSteps(steps: (Step | DBStep)[]): (Step | DBStep)[] {
+  const rootStep = steps.find(step => step.root);
+  if (!rootStep) return [];
+  const orderedSteps = [rootStep];
+  let previousSteps = [rootStep];
+  for (let i = 1; i < steps.length - 1; i++) {
+    const nextSteps = previousSteps.map(prev => (prev.options as any[]) // For all previous steps
+      .map(step => steps.find(s => s.id === step.stepId) as Step) // Add the steps linked by all it's options
+    ).reduce((a, b) => [...a, ...b], []); // Flatten ( [ [a,b],[c,d] ] -> [a,b,c] )
+    if (nextSteps.length === 0) break; // Nothing left. Early exit
+    orderedSteps.push(...nextSteps);
+    previousSteps = nextSteps;
+  }
+  return orderedSteps.filter(a => a);
+}
+
+/** Parse DBSteps to Steps */
+export function parseSteps(steps: DBStep[]): Step[] {
+  return steps.map(step => ({
+    ...step,
+    messages: step.messages.map(message => ({ ...message, id: uuid() })),
+    options: step.options.map(option => ({ ...option, id: uuid() })),
+  }));
+}
+
+/** Convert Steps to DBSteps */
+export function convertSteps(steps: Step[]): DBStep[] {
+  return steps.map(step => {
+    const messages = step.messages.map(({ id, ...message }) => message);
+    const options = step.options.map(({ id, ...option }) => option);
+    return { ...step, messages, options };
+  });
+}
+

@@ -49,6 +49,15 @@ export async function getLibrary(): Promise<Story[]> {
           return { ...story, authorName: author.data()?.name || ''};
         }));
 }
+export const getStorySteps = async (storyId: Story['id']): Promise<Step[]> => {
+  const { docs } = await collection(Collection.Stories).doc(storyId).collection(SubCollection.Steps).get();
+  
+  const steps = docs.map(doc => ({
+    ...doc.data(),
+    id: doc.id,
+  }) as Step);
+  return steps;
+};
 
 export async function newStory(
   authorId: string,

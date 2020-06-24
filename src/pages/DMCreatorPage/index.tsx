@@ -1,16 +1,16 @@
-import React, { useState, useReducer, useCallback } from 'react';
+import React, { useState, useReducer, useCallback, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { Story } from '../../constants/Types';
 import { PreviewFile } from '../../hooks/useFileUpload';
-import { saveStory, saveStoryWithSteps } from '../../lib/Database';
+import { saveStory, saveStoryWithSteps, getStorySteps } from '../../lib/Database';
 
 import Header from '../../components/Header';
 import Link from '../../components/Link';
 import LoadingModal from '../../components/LoadingModal';
 import CreateStoryModal from '../../components/CreateStoryModal';
 import StepDisplay from './StepDisplay';
-import { stepsReducer, newMessage, newStep, Message, Step, Option } from './StepsReducer';
+import { stepsReducer, newMessage, newStep, Message, Step, Option, convertSteps, parseSteps, traverseSteps } from './StepsReducer';
 import './DMCreatorPage.css';
 
 
@@ -22,6 +22,14 @@ const DMCreatorPage: React.FC<DMCreatorPageProps> = () => {
   const [story, setStory] = useState(initStory);
   const [editingMeta, setEditingMeta] = useState<Boolean>(false);
   const [loadingProgress, setLoadingProgress] = useState<number | null>(null);
+
+
+  useEffect(() => {
+    getStorySteps(story.id).then(traverseSteps).then(parseSteps).then(steps => dispatch({
+      type: 'set',
+      steps,
+    }));
+  }, []);
 
 
   const addStep = useCallback(() => {
@@ -65,11 +73,7 @@ const DMCreatorPage: React.FC<DMCreatorPageProps> = () => {
   }, []);
 
   const submit = useCallback(() => {
-    const data = steps.map(step => {
-      const messages = step.messages.map(({ id, ...message }) => message);
-      const options = step.options.map(({ id, ...option }) => option);
-      return { ...step, messages, options };
-    });
+    const data = convertSteps(steps);
     saveStoryWithSteps(story, data);
   }, [steps, story]);
 
