@@ -85,3 +85,7 @@ export async function deleteStory({ id, metadata: { coverPhoto } }: Story): Prom
   await deleteFile(coverPhoto);
   return collection(Collection.Stories).doc(id).delete();
 }
+
+export async function updateStory({ id, ...data }: Story): Promise<void> {
+  await collection(Collection.Stories).doc(id).set(data);
+}
